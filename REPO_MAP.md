@@ -72,6 +72,7 @@
 - `tests/api/test_main.py`: Integration tests for FastAPI application core endpoints and CORS.
 - `tests/api/test_session_manager.py`: Unit tests for SessionManager state storage and file management.
 - `tests/api/test_sessions.py`: Integration tests for session upload, status tracking, and audit execution routes.
+- `tests/api/test_review.py`: Integration tests for verdict inspection, HITL decision recording, and redline document download.
 - `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
 - `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.
 - `tests/agents/test_auditor.py`: Unit tests for Auditor Agent verdict classification.
