@@ -105,5 +105,9 @@
 - `frontend/next.config.ts`: Next.js system configuration.
 - `frontend/src/lib/types.ts`: TypeScript type definitions matching backend REST API models.
 - `frontend/src/lib/api.ts`: API client functions connecting to the FastAPI backend service.
+- `frontend/src/components/Navbar.tsx`: Header navigation bar with backend API health status indicator.
+- `frontend/src/components/UploadCard.tsx`: Contract document upload drag-and-drop component with playbook selection.
+- `frontend/src/components/DiffView.tsx`: Text diff comparison displaying original contract text and proposed redline language.
+- `frontend/src/components/ClauseCard.tsx`: Per-clause verdict card with risk indicators and human review action buttons.
 - `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping.
 - `frontend/src/app/page.tsx`: Landing page and visual UI component interface.
