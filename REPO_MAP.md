@@ -55,6 +55,7 @@
 - `backend/mcp_servers/playbook_server/playbook_ingest.py`: CLI command script for parsing and versioning playbook text files.
 - `backend/api/__init__.py`: Backend API routing package mapping.
 - `backend/api/main.py`: FastAPI app entrypoint defining middleware, logging, and routers.
+- `backend/api/session_manager.py`: Thread-safe session store managing review session contexts and uploaded/generated file paths.
 - `backend/api/routes/__init__.py`: Routing packages mapping.
 - `backend/api/routes/sessions.py`: API routes handling review session initialization and tracking.
 - `backend/api/routes/review.py`: API routes managing human-in-the-loop audit actions (approve, edit, reject).
@@ -67,6 +68,13 @@
 ## Test Suite (`tests/`)
 - `tests/__init__.py`: Test package root.
 - `tests/conftest.py`: Pytest shared fixtures for mocking Bedrock models and MCP server calls.
+- `tests/api/__init__.py`: Unit tests package mapping for backend API service.
+- `tests/api/test_main.py`: Integration tests for FastAPI application core endpoints and CORS.
+- `tests/api/test_session_manager.py`: Unit tests for SessionManager state storage and file management.
+- `tests/api/test_sessions.py`: Integration tests for session upload, status tracking, and audit execution routes.
+- `tests/api/test_review.py`: Integration tests for verdict inspection, HITL decision recording, and redline document download.
+- `tests/api/test_reports.py`: Integration tests for audit report export endpoints.
+- `tests/api/test_api_e2e.py`: End-to-end integration tests verifying full REST API lifecycle with real multi-agent pipeline.
 - `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
 - `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.
 - `tests/agents/test_auditor.py`: Unit tests for Auditor Agent verdict classification.
