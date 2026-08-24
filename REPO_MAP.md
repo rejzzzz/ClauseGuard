@@ -74,6 +74,7 @@
 - `tests/api/test_sessions.py`: Integration tests for session upload, status tracking, and audit execution routes.
 - `tests/api/test_review.py`: Integration tests for verdict inspection, HITL decision recording, and redline document download.
 - `tests/api/test_reports.py`: Integration tests for audit report export endpoints.
+- `tests/api/test_api_e2e.py`: End-to-end integration tests verifying full REST API lifecycle with real multi-agent pipeline.
 - `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
 - `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.
 - `tests/agents/test_auditor.py`: Unit tests for Auditor Agent verdict classification.
