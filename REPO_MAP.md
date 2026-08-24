@@ -69,6 +69,7 @@
 - `tests/__init__.py`: Test package root.
 - `tests/conftest.py`: Pytest shared fixtures for mocking Bedrock models and MCP server calls.
 - `tests/api/__init__.py`: Unit tests package mapping for backend API service.
+- `tests/api/test_main.py`: Integration tests for FastAPI application core endpoints and CORS.
 - `tests/api/test_session_manager.py`: Unit tests for SessionManager state storage and file management.
 - `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
 - `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.
