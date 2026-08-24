@@ -1,4 +1,4 @@
-# OOXML mutation wrapper utilizing python-docx to insert w:ins, w:del and comments.
+import html
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
@@ -10,13 +10,15 @@ from docx.oxml import parse_xml
 def create_w_del(text: str, author: str = "ClauseGuard", change_id: int = 1) -> OxmlElement:
     """Creates a <w:del> element with tracked deletion text."""
     now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    xml = f'<w:del {nsdecls("w")} w:id="{change_id}" w:author="{author}" w:date="{now_iso}"><w:r><w:delText xml:space="preserve">{text}</w:delText></w:r></w:del>'
+    escaped_text = html.escape(text)
+    xml = f'<w:del {nsdecls("w")} w:id="{change_id}" w:author="{author}" w:date="{now_iso}"><w:r><w:delText xml:space="preserve">{escaped_text}</w:delText></w:r></w:del>'
     return parse_xml(xml)
 
 def create_w_ins(text: str, author: str = "ClauseGuard", change_id: int = 2) -> OxmlElement:
     """Creates a <w:ins> element with tracked insertion text."""
     now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    xml = f'<w:ins {nsdecls("w")} w:id="{change_id}" w:author="{author}" w:date="{now_iso}"><w:r><w:t xml:space="preserve">{text}</w:t></w:r></w:ins>'
+    escaped_text = html.escape(text)
+    xml = f'<w:ins {nsdecls("w")} w:id="{change_id}" w:author="{author}" w:date="{now_iso}"><w:r><w:t xml:space="preserve">{escaped_text}</w:t></w:r></w:ins>'
     return parse_xml(xml)
 
 def apply_tracked_redlines(
