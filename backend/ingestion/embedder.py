@@ -56,3 +56,14 @@ class BedrockEmbedder:
         Generates vector embeddings for a list of text blocks.
         """
         return [self.embed_text(t) for t in texts]
+
+    def embed_chunks(self, chunks: List[dict]) -> List[dict]:
+        """
+        Populates the 'embedding' field for a list of chunk dictionaries.
+        """
+        texts = [c["text"] for c in chunks]
+        embeddings = self.embed_texts(texts)
+        for chunk, emb in zip(chunks, embeddings):
+            chunk["embedding"] = emb
+        return chunks
+
