@@ -34,6 +34,7 @@
 - `backend/agents/base/agent_factory.py`: Shared model initialization and Strands Agent client generation.
 - `backend/ingestion/__init__.py`: Ingestion package mapping.
 - `backend/ingestion/docx_parser.py`: Document parser extracting raw text, tables, and styles from .docx files.
+- `backend/ingestion/pdf_parser.py`: Extracts text, page numbers, and structural outlines from .pdf documents.
 - `backend/ingestion/clause_tree.py`: Structure-aware segmenter parsing document outline levels into a clause tree.
 - `backend/ingestion/chunker.py`: Chunker that splits clauses by structure-aware boundaries rather than token limits.
 - `backend/ingestion/embedder.py`: Embedding utility wrapping Amazon Bedrock Titan Embeddings.
@@ -70,6 +71,7 @@
 - `tests/agents/test_critic.py`: Unit tests for Critic Agent grounding verification.
 - `tests/ingestion/__init__.py`: Unit tests package mapping for ingestion pipeline.
 - `tests/ingestion/test_docx_parser.py`: Unit tests for document parser and IR extraction.
+- `tests/ingestion/test_pdf_parser.py`: Unit tests for PDF parser.
 - `tests/ingestion/test_chunker.py`: Unit tests for structure-aware clause chunking.
 - `tests/redlining/__init__.py`: Unit tests package mapping for redlining and XML surgery.
 - `tests/redlining/test_docx_redline_engine.py`: Unit tests for OOXML tracked-changes insertion.
