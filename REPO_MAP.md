@@ -30,6 +30,7 @@
 - `backend/agents/redliner/edit_schema.py`: Pydantic models defining the structured edit instructions output by the Redliner.
 - `backend/agents/critic/__init__.py`: Critic agent package mapping.
 - `backend/agents/critic/agent.py`: Critic Agent (Validator) checking auditor verdicts against cited playbook documents.
+- `backend/agents/critic/critic_schema.py`: Pydantic models defining the structured output of the Critic Agent grounding verification.
 - `backend/agents/critic/grounding_check.py`: Verification function assessing semantic entailment of cited rules against auditor claims.
 - `backend/agents/base/__init__.py`: Base agent utilities package mapping.
 - `backend/agents/base/agent_factory.py`: Shared model initialization and Strands Agent client generation.
