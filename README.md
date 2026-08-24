@@ -21,12 +21,9 @@ ClauseGuard automates the preliminary auditing and drafting. It parses the contr
 
 ## Architecture
 
-ClauseGuard uses the Strands Agents SDK to orchestrate the multi-agent system:
+ClauseGuard is driven by a 4-agent hierarchy (Orchestrator, Auditor, Redliner, Critic) orchestrated via the Strands Agents SDK, Amazon Bedrock FMs, and Model Context Protocol (MCP).
 
-1. **Orchestrator:** Delegates tasks via `.as_tool()`, manages state, and gates final approval.
-2. **Auditor:** Retrieves playbook rules via MCP and classifies contract clauses.
-3. **Redliner:** Generates replacement/insertion language based on pre-approved playbook fallbacks.
-4. **Critic:** Validates cited references against the vector store to prevent hallucinations.
+For complete system diagrams, agent specs, and retrieval flows, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Technical Stack
 

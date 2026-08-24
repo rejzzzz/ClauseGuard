@@ -1,30 +1,27 @@
 # AGENTS.md
 
-## Rules
-- Understand existing code before changing it; search for similar implementations first.
-- Follow existing repository patterns over generic best practices.
-- Prefer simple, explicit code over unnecessary OOP, abstractions, interfaces, or design patterns.
-- Keep modules cohesive and dependencies explicit; optimize for local reasoning.
-- Organize code by feature/domain; don't split files just to meet a line-count rule.
-- Make the smallest change necessary; avoid unrelated refactors.
-- Preserve existing behavior unless explicitly asked to change it.
-- Treat types, schemas, contracts, and tests as sources of truth.
-- Add/update tests for behavior changes.
-- Run `pytest -q` before declaring work complete.
-- Do not add heavy dependencies without approval.
-- Use `pathlib.Path` and list-form `subprocess` calls; support Linux and Windows.
+## Before Changing Code
+- Search for similar existing implementations before writing new code; follow repo patterns over generic best practices.
+- Make the smallest change that solves the problem; no unrelated refactors.
+- If an architectural/security/data-model decision isn't clearly supported by repo evidence, stop and ask.
 
-## Workflow
-1. Explore → identify relevant code, tests, types, and existing patterns.
-2. Plan → identify the smallest set of files that need changing.
-3. Implement → follow existing conventions.
-4. Verify → run tests and inspect the final diff.
-5. Report → summarize changes and tests run.
+## Code Style
+- Prefer simple, explicit code over unnecessary OOP, abstractions, or design patterns.
+- Organize by feature/domain, not file-size quotas — split only when a module has genuinely mixed responsibilities.
+- Keep dependencies explicit and modules independently readable.
+- Use `pathlib.Path` and list-form `subprocess` calls — must run on Linux and Windows.
+- No new heavy dependencies (torch, docker, redis) without approval.
 
-## Decisions
-- Prefer fewer files, fewer abstractions, and less behavioral change.
-- If repository evidence is insufficient for an architectural/security/data-model decision, ask before proceeding.
+## Maintainability
+- Keep `REPO_MAP.md` current: one line per file describing its purpose. Update in the same commit as any add/remove/rename.
+- Treat types, schemas, and existing tests as sources of truth — don't silently change contracts.
+- Add/update tests in `tests/`, mirroring source structure (`src/x/y.py` → `tests/x/test_y.py`).
+- Run `pytest -q` before declaring work done; do not report complete if tests fail.
 
 ## Git
-- `main` = stable; `dev` = integration; `feature/*` and `fix/*` branch from `dev`.
-- Merge feature/fix → `dev`; merge `dev` → `main` only for stable releases.
+- `main` = stable only, never commit/branch directly. `dev` = integration. `feat/*`/`fix/*` branch from `dev`.
+- One logical change per commit: `<scope>: <what changed>`.
+- PR into `dev`; merge `dev` → `main` only for tested, stable releases.
+
+## Reporting
+- Summarize what changed, why, and which tests were run — every time.

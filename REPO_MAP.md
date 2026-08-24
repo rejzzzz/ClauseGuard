@@ -2,6 +2,7 @@
 
 ## Root Configuration
 - `AGENTS.md`: Project guidelines and Multi-Agent description.
+- `ARCHITECTURE.md`: High-level multi-agent architecture and system flow documentation.
 - `LICENSE`: MIT license agreement.
 - `PLAN.md`: Strategic implementation blueprint for 21-day milestones.
 - `README.md`: High-level product summary and quickstart guide.
