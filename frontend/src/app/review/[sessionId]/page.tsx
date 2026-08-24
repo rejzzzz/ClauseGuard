@@ -38,26 +38,48 @@ export default function ReviewPage({ params }: ReviewPageProps) {
   const [humanDecisions, setHumanDecisions] = useState<Record<string, HITLDecisionItem>>({});
 
   // Fetch initial session state
-  const loadSession = async () => {
+  const refreshSession = async () => {
     try {
-      setLoading(true);
       const s = await getSessionStatus(sessionId);
       setSession(s);
 
-      // If session is already audited/awaiting human/finalized, load verdicts
       if (s.current_state === 'AWAITING_HUMAN' || s.current_state === 'FINALIZED' || s.audit_report) {
         const vData = await getSessionVerdicts(sessionId);
         setVerdictsData(vData);
       }
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : 'Failed to load review session.');
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadSession();
+    let ignore = false;
+    async function initSession() {
+      try {
+        const s = await getSessionStatus(sessionId);
+        if (ignore) return;
+        setSession(s);
+
+        if (s.current_state === 'AWAITING_HUMAN' || s.current_state === 'FINALIZED' || s.audit_report) {
+          const vData = await getSessionVerdicts(sessionId);
+          if (ignore) return;
+          setVerdictsData(vData);
+        }
+      } catch (err: unknown) {
+        if (!ignore) {
+          setErrorMessage(err instanceof Error ? err.message : 'Failed to load review session.');
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    initSession();
+    return () => {
+      ignore = true;
+    };
   }, [sessionId]);
 
   const handleRunAudit = async () => {
@@ -101,7 +123,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
       setErrorMessage(null);
       const res = await submitHitlDecisions(sessionId, decisionsList);
       setStatusMessage(res.message);
-      await loadSession();
+      await refreshSession();
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : 'Failed to apply human review decisions.');
     } finally {

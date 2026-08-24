@@ -21,7 +21,6 @@ export default function ReportPage({ params }: ReportPageProps) {
   useEffect(() => {
     async function loadReport() {
       try {
-        setLoading(true);
         const data = await getAuditReport(sessionId);
         setReportData(data);
       } catch (err: unknown) {
