@@ -83,6 +83,7 @@
 - `tests/redlining/__init__.py`: Unit tests package mapping for redlining and XML surgery.
 - `tests/redlining/test_docx_redline_engine.py`: Unit tests for OOXML tracked-changes insertion.
 - `tests/redlining/test_redlining_e2e.py`: End-to-end integration test for document auditing, redlining, and OOXML tracked-changes mutation.
+- `tests/redlining/test_redlining_edge_cases.py`: Unit tests for edge cases in redline mutation, diff HTML, and missing clause actions.
 - `tests/retrieval/__init__.py`: Unit tests package mapping for vector store search.
 - `tests/retrieval/test_vector_store.py`: Unit tests for FAISS indexing and retrieval.
 - `tests/mcp_servers/__init__.py`: Unit tests package mapping for MCP servers.
