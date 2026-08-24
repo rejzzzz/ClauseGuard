@@ -69,6 +69,7 @@
 - `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
 - `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.
 - `tests/agents/test_auditor.py`: Unit tests for Auditor Agent verdict classification.
+- `tests/agents/test_auditor_e2e.py`: End-to-end integration test for document auditing against playbooks.
 - `tests/agents/test_redliner.py`: Unit tests for Redliner Agent edit instructions.
 - `tests/agents/test_critic.py`: Unit tests for Critic Agent grounding verification.
 - `tests/ingestion/__init__.py`: Unit tests package mapping for ingestion pipeline.
