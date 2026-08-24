@@ -1,5 +1,4 @@
 # AGENTS.md
-
 - Follow OOP principles: encapsulation, single responsibility, clear class boundaries — no god objects.
 - Keep components loosely coupled: depend on interfaces/contracts, not concrete implementations across modules.
 - Maintain `REPO_MAP.md` at the root: one line per file, stating what it does. Update it in the same commit as any file add/remove/rename.
@@ -10,6 +9,11 @@
 - No new heavy dependencies (torch, docker, redis) without explicit approval — this project must stay lightweight and local-only.
 - Commit messages: `<scope>: <what changed>`, one logical change per commit.
 - When blocked or uncertain about architecture, stop and report — don't silently improvise a workaround.
+
+## Git & Branching Rules
+- **Branches:** `main` (stable only), `dev` (active integration), `feature/*` or `fix/*` (created from `dev`).
+- **Workflow:** Branch off `dev` (`git checkout -b feature/...`) → small commits → PR into `dev` → test and merge.
+- **Main Policy:** Never commit or branch off `main`. Merge `dev` → `main` only for tested, stable releases.
 
 ## ClauseGuard Agents
 1. **Orchestrator ("Lead Counsel"):** Manages workflow, delegates tasks via `.as_tool()`, and controls the Human-In-The-Loop gate.

@@ -1,0 +1,86 @@
+# Repository Map
+
+## Root Configuration
+- `AGENTS.md`: Project guidelines and Multi-Agent description.
+- `LICENSE`: MIT license agreement.
+- `PLAN.md`: Strategic implementation blueprint for 21-day milestones.
+- `README.md`: High-level product summary and quickstart guide.
+- `REPO_MAP.md`: This file; a directory of codebase files and their purpose.
+- `requirements.txt`: Python package dependencies.
+- `info.md`: Virtual environment activation quickstart.
+- `.env`: Environment variables configuration template.
+- `.gitignore`: Files and folders ignored by git version control.
+
+## Backend Service (`backend/`)
+- `backend/__init__.py`: Backend package initializer.
+- `backend/agents/__init__.py`: Package mapping for the multi-agent system.
+- `backend/agents/orchestrator/__init__.py`: Orchestrator agent package mapping.
+- `backend/agents/orchestrator/agent.py`: Orchestrator agent that decomposes tasks, coordinates sub-agents, and manages HITL gates.
+- `backend/agents/orchestrator/prompts.py`: System prompts and guidelines for the Orchestrator (Lead Counsel) Agent.
+- `backend/agents/orchestrator/state_machine.py`: Session state machine governing contract auditing and redlining transitions.
+- `backend/agents/orchestrator/tools.py`: Tools exposed to the Orchestrator, such as agent-to-agent delegation functions.
+- `backend/agents/auditor/__init__.py`: Auditor agent package mapping.
+- `backend/agents/auditor/agent.py`: Auditor Agent (Paralegal) that classifies contract clauses against legal playbooks.
+- `backend/agents/auditor/prompts.py`: System prompts and guidelines for the Auditor Agent.
+- `backend/agents/auditor/verdict_schema.py`: Pydantic models defining the structured output of the Auditor's contract analysis.
+- `backend/agents/redliner/__init__.py`: Redliner agent package mapping.
+- `backend/agents/redliner/agent.py`: Redliner Agent (Drafter) that proposes replacement/insertion language for contract deviations.
+- `backend/agents/redliner/prompts.py`: System prompts and generation constraints for the Redliner Agent.
+- `backend/agents/redliner/edit_schema.py`: Pydantic models defining the structured edit instructions output by the Redliner.
+- `backend/agents/critic/__init__.py`: Critic agent package mapping.
+- `backend/agents/critic/agent.py`: Critic Agent (Validator) checking auditor verdicts against cited playbook documents.
+- `backend/agents/critic/grounding_check.py`: Verification function assessing semantic entailment of cited rules against auditor claims.
+- `backend/agents/base/__init__.py`: Base agent utilities package mapping.
+- `backend/agents/base/agent_factory.py`: Shared model initialization and Strands Agent client generation.
+- `backend/ingestion/__init__.py`: Ingestion package mapping.
+- `backend/ingestion/docx_parser.py`: Document parser extracting raw text, tables, and styles from .docx files.
+- `backend/ingestion/clause_tree.py`: Structure-aware segmenter parsing document outline levels into a clause tree.
+- `backend/ingestion/chunker.py`: Chunker that splits clauses by structure-aware boundaries rather than token limits.
+- `backend/ingestion/embedder.py`: Embedding utility wrapping Amazon Bedrock Titan Embeddings.
+- `backend/redlining/__init__.py`: Redlining package mapping.
+- `backend/redlining/docx_redline_engine.py`: OOXML mutation wrapper utilizing python-docx to insert w:ins, w:del and comments.
+- `backend/redlining/clause_bank.py`: Retrieval utility matching standard approved fallback clauses from the playbook.
+- `backend/redlining/diff_utils.py`: Text diff rendering utility for displaying deviations in the review UI.
+- `backend/retrieval/__init__.py`: Retrieval package mapping.
+- `backend/retrieval/vector_store.py`: Local FAISS database abstraction handling indexing and query matching.
+- `backend/retrieval/reranker.py`: Reranker selecting top-k rules from search results using cross-encoder/LLM signals.
+- `backend/mcp_servers/__init__.py`: Package mapping for external MCP servers.
+- `backend/mcp_servers/playbook_server/__init__.py`: Playbook server package mapping.
+- `backend/mcp_servers/playbook_server/server.py`: Playbook MCP server exposing search and document retrieval tools.
+- `backend/mcp_servers/playbook_server/schemas.py`: Playbook document and query response schemas.
+- `backend/mcp_servers/playbook_server/playbook_ingest.py`: CLI command script for parsing and versioning playbook text files.
+- `backend/api/__init__.py`: Backend API routing package mapping.
+- `backend/api/main.py`: FastAPI app entrypoint defining middleware, logging, and routers.
+- `backend/api/routes/__init__.py`: Routing packages mapping.
+- `backend/api/routes/sessions.py`: API routes handling review session initialization and tracking.
+- `backend/api/routes/review.py`: API routes managing human-in-the-loop audit actions (approve, edit, reject).
+- `backend/api/routes/reports.py`: API routes managing exportable audit reports.
+- `backend/api/models.py`: Pydantic models defining REST API request and response schemas.
+- `backend/config/__init__.py`: Config modules package mapping.
+- `backend/config/settings.py`: Global project configuration loading settings from environment variables.
+- `backend/config/playbooks/sample_vendor_msa.md`: Standard company vendor Master Services Agreement (MSA) playbook rules.
+
+## Test Suite (`tests/`)
+- `tests/__init__.py`: Test package root.
+- `tests/conftest.py`: Pytest shared fixtures for mocking Bedrock models and MCP server calls.
+- `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
+- `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.
+- `tests/agents/test_auditor.py`: Unit tests for Auditor Agent verdict classification.
+- `tests/agents/test_redliner.py`: Unit tests for Redliner Agent edit instructions.
+- `tests/agents/test_critic.py`: Unit tests for Critic Agent grounding verification.
+- `tests/ingestion/__init__.py`: Unit tests package mapping for ingestion pipeline.
+- `tests/ingestion/test_docx_parser.py`: Unit tests for document parser and IR extraction.
+- `tests/ingestion/test_chunker.py`: Unit tests for structure-aware clause chunking.
+- `tests/redlining/__init__.py`: Unit tests package mapping for redlining and XML surgery.
+- `tests/redlining/test_docx_redline_engine.py`: Unit tests for OOXML tracked-changes insertion.
+- `tests/retrieval/__init__.py`: Unit tests package mapping for vector store search.
+- `tests/retrieval/test_vector_store.py`: Unit tests for FAISS indexing and retrieval.
+
+## Frontend Next.js Application (`frontend/`)
+- `frontend/package.json`: Frontend dependency and script configuration.
+- `frontend/tsconfig.json`: TypeScript configuration for the frontend app.
+- `frontend/tailwind.config.ts`: Tailwind CSS design configuration.
+- `frontend/postcss.config.mjs`: PostCSS configuration for styling.
+- `frontend/next.config.ts`: Next.js system configuration.
+- `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping.
+- `frontend/src/app/page.tsx`: Landing page and visual UI component interface.

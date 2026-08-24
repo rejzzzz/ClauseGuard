@@ -1,3 +1,26 @@
+# Environments & Config
 .env
 .venv
 info.md
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local Vector Stores & Temporary Artifacts
+*.faiss
+*.pkl
+scratch/
+outputs/
+temp/
+
+# OS Specific
+.DS_Store
+Thumbs.db
