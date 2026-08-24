@@ -109,6 +109,8 @@
 - `frontend/src/components/UploadCard.tsx`: Contract document upload drag-and-drop component with playbook selection.
 - `frontend/src/components/DiffView.tsx`: Text diff comparison displaying original contract text and proposed redline language.
 - `frontend/src/components/ClauseCard.tsx`: Per-clause verdict card with risk indicators and human review action buttons.
+- `frontend/src/components/ReportViewer.tsx`: Structured summary card displaying document risk metrics, Critic grounding score, and session history log.
 - `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping.
 - `frontend/src/app/page.tsx`: Landing page and visual UI component interface.
 - `frontend/src/app/review/[sessionId]/page.tsx`: Interactive review workspace for clause auditing, HITL actions, and redline document finalization.
+- `frontend/src/app/reports/[sessionId]/page.tsx`: Audit summary report page visualizing document risk metrics and Critic grounding traces.
