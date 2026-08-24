@@ -79,8 +79,10 @@
 - `tests/ingestion/test_clause_tree.py`: Unit tests for clause tree construction and heading level detection.
 - `tests/ingestion/test_embedder.py`: Unit tests for BedrockEmbedder vector generation.
 - `tests/ingestion/test_pipeline.py`: Integration tests for end-to-end contract document ingestion.
+- `tests/agents/test_redliner.py`: Unit tests for Redliner Agent edit instruction generation.
 - `tests/redlining/__init__.py`: Unit tests package mapping for redlining and XML surgery.
 - `tests/redlining/test_docx_redline_engine.py`: Unit tests for OOXML tracked-changes insertion.
+- `tests/redlining/test_redlining_e2e.py`: End-to-end integration test for document auditing, redlining, and OOXML tracked-changes mutation.
 - `tests/retrieval/__init__.py`: Unit tests package mapping for vector store search.
 - `tests/retrieval/test_vector_store.py`: Unit tests for FAISS indexing and retrieval.
 - `tests/mcp_servers/__init__.py`: Unit tests package mapping for MCP servers.
