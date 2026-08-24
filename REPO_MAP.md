@@ -81,6 +81,8 @@
 - `tests/agents/test_auditor_e2e.py`: End-to-end integration test for document auditing against playbooks.
 - `tests/agents/test_redliner.py`: Unit tests for Redliner Agent edit instructions.
 - `tests/agents/test_critic.py`: Unit tests for Critic Agent grounding verification.
+- `tests/agents/test_agent_factory.py`: Unit tests for AgentFactory model mapping and Bedrock client resolution.
+- `tests/agents/test_sdk_integration.py`: End-to-end integration tests for multi-agent reasoning, SDK configurations, and HITL document finalization.
 - `tests/ingestion/__init__.py`: Unit tests package mapping for ingestion pipeline.
 - `tests/ingestion/test_docx_parser.py`: Unit tests for document parser and IR extraction.
 - `tests/ingestion/test_pdf_parser.py`: Unit tests for PDF parser.
