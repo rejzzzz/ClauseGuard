@@ -103,5 +103,7 @@
 - `frontend/tailwind.config.ts`: Tailwind CSS design configuration.
 - `frontend/postcss.config.mjs`: PostCSS configuration for styling.
 - `frontend/next.config.ts`: Next.js system configuration.
+- `frontend/src/lib/types.ts`: TypeScript type definitions matching backend REST API models.
+- `frontend/src/lib/api.ts`: API client functions connecting to the FastAPI backend service.
 - `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping.
 - `frontend/src/app/page.tsx`: Landing page and visual UI component interface.
