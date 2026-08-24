@@ -4,6 +4,10 @@ from docx import Document
 from backend.ingestion.pipeline import ingest_contract
 from backend.agents.auditor.agent import AuditorAgent
 from backend.agents.auditor.verdict_schema import VerdictEnum, SeverityEnum, ContractAuditReport
+from backend.agents.critic.agent import CriticAgent
+from backend.agents.critic.critic_schema import ContractCriticReport
+from backend.agents.redliner.agent import RedlinerAgent
+from backend.agents.redliner.edit_schema import RedlinePackage
 
 def test_e2e_contract_auditing(tmp_path: Path):
     docx_path = tmp_path / "audit_test_contract.docx"
@@ -40,7 +44,6 @@ def test_e2e_contract_auditing(tmp_path: Path):
     assert report.verdicts[2].verdict == VerdictEnum.DEVIATION
     assert report.verdicts[2].severity == SeverityEnum.MEDIUM
 
-
 def test_e2e_auditing_indemnification_violation(tmp_path: Path):
     docx_path = tmp_path / "indemnity_contract.docx"
     doc = Document()
@@ -60,7 +63,6 @@ def test_e2e_auditing_indemnification_violation(tmp_path: Path):
     assert v.severity == SeverityEnum.CRITICAL
     assert len(v.playbook_citation_ids) > 0
 
-
 def test_e2e_auditing_jurisdiction_fallback(tmp_path: Path):
     docx_path = tmp_path / "jurisdiction_contract.docx"
     doc = Document()
@@ -77,7 +79,6 @@ def test_e2e_auditing_jurisdiction_fallback(tmp_path: Path):
     v = report.verdicts[0]
     assert v.verdict == VerdictEnum.DEVIATION
     assert v.severity == SeverityEnum.MEDIUM
-
 
 def test_e2e_report_json_serialization(tmp_path: Path):
     docx_path = tmp_path / "simple_contract.docx"
@@ -96,3 +97,33 @@ def test_e2e_report_json_serialization(tmp_path: Path):
     assert "total_clauses" in dump
     assert "verdicts" in dump
     assert "overall_risk_level" in dump
+
+def test_e2e_auditor_critic_redliner_pipeline_integration(tmp_path: Path):
+    docx_path = tmp_path / "pipeline_contract.docx"
+    doc = Document()
+    doc.add_heading("Vendor Agreement", level=1)
+    doc.add_heading("Section 1: Limitation of Liability", level=2)
+    doc.add_paragraph("Vendor liability shall be uncapped for any operational losses.")
+    doc.save(str(docx_path))
+
+    # 1. Ingestion
+    chunks = ingest_contract(docx_path)
+    assert len(chunks) == 1
+
+    # 2. Auditor
+    auditor = AuditorAgent()
+    audit_report = auditor.audit_contract(chunks, playbook_name="sample_vendor_msa", contract_name="pipeline_contract.docx")
+    assert audit_report.total_clauses == 1
+
+    # 3. Critic
+    critic = CriticAgent()
+    critic_report = critic.validate_audit_report(audit_report, playbook_name="sample_vendor_msa")
+    assert isinstance(critic_report, ContractCriticReport)
+    assert critic_report.total_verdicts_checked == 1
+    assert critic_report.grounded_verdicts == 1
+
+    # 4. Redliner
+    redliner = RedlinerAgent()
+    redline_pkg = redliner.generate_redline_package(audit_report, chunks)
+    assert isinstance(redline_pkg, RedlinePackage)
+    assert redline_pkg.total_edits == 1
