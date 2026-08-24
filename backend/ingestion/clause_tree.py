@@ -1,5 +1,42 @@
 # Structure-aware segmenter parsing document outline levels into a clause tree.
+import re
 from typing import List, Dict, Any, Optional
+
+def get_heading_level(title: str, style: str = "") -> int:
+    """
+    Determines heading nesting level based on style names and legal numbering patterns.
+    """
+    # Style level check (e.g. style = "Heading 1" -> level 1)
+    if style.startswith("Heading "):
+        try:
+            return int(style.split(" ")[-1])
+        except ValueError:
+            pass
+
+    clean_title = title.strip()
+    words = clean_title.split()
+    if not words:
+        return 1
+
+    # Check for dotted section numbering (e.g., "1.1.1", "Section 2.1.4")
+    num_part = words[1] if words[0].lower() in ("section", "article", "sec", "art") and len(words) > 1 else words[0]
+    num_part = num_part.rstrip(".:;")
+    
+    if all(c.isdigit() or c == "." for c in num_part) and "." in num_part:
+        return num_part.count(".") + 1
+
+    # Check for sub-clause lettering/numbering like "(a)", "(1)", "(i)"
+    if re.match(r"^\([a-z0-9]+\)", clean_title, re.IGNORECASE):
+        return 3
+
+    # Articles vs Sections heuristic
+    if words[0].lower() in ("article", "art"):
+        return 1
+    if words[0].lower() in ("section", "sec"):
+        return 2
+
+    return 1
+
 
 def build_clause_tree(segments: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
@@ -17,31 +54,6 @@ def build_clause_tree(segments: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         "parent_chain": []
     }
     
-    def get_heading_level(title: str, style: str) -> int:
-        # Style level check (e.g. style = "Heading 1" -> level 1)
-        if style.startswith("Heading "):
-            try:
-                return int(style.split(" ")[-1])
-            except ValueError:
-                pass
-        
-        # Numbering scheme checks (e.g. "1.1.1 " -> level 3)
-        words = title.split()
-        if not words:
-            return 1
-            
-        num_part = ""
-        if words[0].lower() in ("section", "article", "sec", "art") and len(words) > 1:
-            num_part = words[1]
-        else:
-            num_part = words[0]
-            
-        num_part = num_part.rstrip(".")
-        if all(c.isdigit() or c == "." for c in num_part) and "." in num_part:
-            return num_part.count(".") + 1
-            
-        return 1
-        
     stack = [root]
     
     for segment in segments:
@@ -72,3 +84,4 @@ def build_clause_tree(segments: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             stack[-1]["segments"].append(segment)
             
     return root["children"]
+

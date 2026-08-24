@@ -39,6 +39,7 @@
 - `backend/ingestion/clause_tree.py`: Structure-aware segmenter parsing document outline levels into a clause tree.
 - `backend/ingestion/chunker.py`: Chunker that splits clauses by structure-aware boundaries rather than token limits.
 - `backend/ingestion/embedder.py`: Embedding utility wrapping Amazon Bedrock Titan Embeddings.
+- `backend/ingestion/pipeline.py`: Unified ingestion pipeline entrypoint processing .docx and .pdf files into embedded clause chunks.
 - `backend/redlining/__init__.py`: Redlining package mapping.
 - `backend/redlining/docx_redline_engine.py`: OOXML mutation wrapper utilizing python-docx to insert w:ins, w:del and comments.
 - `backend/redlining/clause_bank.py`: Retrieval utility matching standard approved fallback clauses from the playbook.
@@ -74,6 +75,9 @@
 - `tests/ingestion/test_docx_parser.py`: Unit tests for document parser and IR extraction.
 - `tests/ingestion/test_pdf_parser.py`: Unit tests for PDF parser.
 - `tests/ingestion/test_chunker.py`: Unit tests for structure-aware clause chunking.
+- `tests/ingestion/test_clause_tree.py`: Unit tests for clause tree construction and heading level detection.
+- `tests/ingestion/test_embedder.py`: Unit tests for BedrockEmbedder vector generation.
+- `tests/ingestion/test_pipeline.py`: Integration tests for end-to-end contract document ingestion.
 - `tests/redlining/__init__.py`: Unit tests package mapping for redlining and XML surgery.
 - `tests/redlining/test_docx_redline_engine.py`: Unit tests for OOXML tracked-changes insertion.
 - `tests/retrieval/__init__.py`: Unit tests package mapping for vector store search.
