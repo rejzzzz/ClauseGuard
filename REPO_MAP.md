@@ -77,6 +77,8 @@
 - `tests/redlining/test_docx_redline_engine.py`: Unit tests for OOXML tracked-changes insertion.
 - `tests/retrieval/__init__.py`: Unit tests package mapping for vector store search.
 - `tests/retrieval/test_vector_store.py`: Unit tests for FAISS indexing and retrieval.
+- `tests/mcp_servers/__init__.py`: Unit tests package mapping for MCP servers.
+- `tests/mcp_servers/test_playbook_server.py`: Unit tests for FastMCP playbook server tools.
 
 ## Frontend Next.js Application (`frontend/`)
 - `frontend/package.json`: Frontend dependency and script configuration.
