@@ -65,6 +65,18 @@ def test_state_machine_invalid_transition_raises_error():
     with pytest.raises(ValueError, match="Invalid state transition"):
         sm.transition_to(SessionStateEnum.FINALIZED)
 
+def test_state_machine_failed_recovery_flow():
+    ctx = SessionContext()
+    sm = AuditStateMachine(ctx)
+    
+    sm.transition_to(SessionStateEnum.INGESTED)
+    sm.transition_to(SessionStateEnum.FAILED, metadata={"error": "Parsing failed"})
+    assert ctx.current_state == SessionStateEnum.FAILED
+    
+    # Recovery from FAILED back to UNINITIALIZED
+    sm.transition_to(SessionStateEnum.UNINITIALIZED)
+    assert ctx.current_state == SessionStateEnum.UNINITIALIZED
+
 def test_orchestrator_tools_delegation(sample_docx_file):
     # Test ingestion tool
     chunks = dispatch_to_ingestion(str(sample_docx_file))
@@ -130,3 +142,44 @@ def test_orchestrator_human_review_and_finalization(sample_docx_file, tmp_path):
     assert session.current_state == SessionStateEnum.FINALIZED
     assert session.final_docx_path == str(out_docx)
     assert Path(final_path).exists()
+
+def test_orchestrator_human_review_rejection_removes_edits(sample_docx_file):
+    agent = OrchestratorAgent()
+    session = agent.run_audit_pipeline(
+        contract_path=str(sample_docx_file),
+        playbook_name="sample_vendor_msa"
+    )
+    
+    if session.redline_package and len(session.redline_package.edits) > 0:
+        initial_count = len(session.redline_package.edits)
+        target_clause_id = session.redline_package.edits[0].clause_id
+        
+        # Human rejects the proposed edit
+        decisions = [{"clause_id": target_clause_id, "action": "REJECT"}]
+        session = agent.apply_human_review(session, decisions)
+        
+        assert len(session.redline_package.edits) == initial_count - 1
+        assert not any(e.clause_id == target_clause_id for e in session.redline_package.edits)
+
+def test_orchestrator_invalid_state_operations(sample_docx_file):
+    agent = OrchestratorAgent()
+    session = SessionContext(contract_path=str(sample_docx_file))
+    
+    # State is UNINITIALIZED, applying human review or finalization should raise ValueError
+    with pytest.raises(ValueError, match="Cannot apply human review in state"):
+        agent.apply_human_review(session, [])
+        
+    with pytest.raises(ValueError, match="Cannot finalize session in state"):
+        agent.finalize_review(session)
+
+def test_session_context_serialization(sample_docx_file):
+    agent = OrchestratorAgent()
+    session = agent.run_audit_pipeline(contract_path=str(sample_docx_file))
+    
+    dump = session.model_dump()
+    assert dump["session_id"] == session.session_id
+    assert dump["current_state"] == SessionStateEnum.AWAITING_HUMAN.value
+    
+    reconstituted = SessionContext.model_validate(dump)
+    assert reconstituted.session_id == session.session_id
+    assert reconstituted.current_state == SessionStateEnum.AWAITING_HUMAN
