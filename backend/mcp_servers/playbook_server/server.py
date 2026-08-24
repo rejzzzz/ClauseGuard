@@ -13,6 +13,8 @@ from backend.mcp_servers.playbook_server.schemas import (
 
 mcp = FastMCP("PlaybookServer")
 
+from backend.mcp_servers.playbook_server.playbook_ingest import ensure_default_playbook_index
+
 _vector_store_cache: Dict[str, LocalVectorStore] = {}
 
 def _get_vector_store(playbook_name: str) -> LocalVectorStore:
@@ -20,7 +22,7 @@ def _get_vector_store(playbook_name: str) -> LocalVectorStore:
     index_dir = project_root / "backend" / "config" / "playbooks" / f"{playbook_name}_index"
     
     if not index_dir.exists():
-        raise FileNotFoundError(f"Playbook index directory not found: {index_dir}")
+        index_dir = ensure_default_playbook_index(playbook_name)
         
     cache_key = str(index_dir)
     if cache_key not in _vector_store_cache:
