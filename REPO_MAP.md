@@ -30,6 +30,7 @@
 - `backend/agents/redliner/edit_schema.py`: Pydantic models defining the structured edit instructions output by the Redliner.
 - `backend/agents/critic/__init__.py`: Critic agent package mapping.
 - `backend/agents/critic/agent.py`: Critic Agent (Validator) checking auditor verdicts against cited playbook documents.
+- `backend/agents/critic/critic_schema.py`: Pydantic models defining the structured output of the Critic Agent grounding verification.
 - `backend/agents/critic/grounding_check.py`: Verification function assessing semantic entailment of cited rules against auditor claims.
 - `backend/agents/base/__init__.py`: Base agent utilities package mapping.
 - `backend/agents/base/agent_factory.py`: Shared model initialization and Strands Agent client generation.
@@ -54,6 +55,7 @@
 - `backend/mcp_servers/playbook_server/playbook_ingest.py`: CLI command script for parsing and versioning playbook text files.
 - `backend/api/__init__.py`: Backend API routing package mapping.
 - `backend/api/main.py`: FastAPI app entrypoint defining middleware, logging, and routers.
+- `backend/api/session_manager.py`: Thread-safe session store managing review session contexts and uploaded/generated file paths.
 - `backend/api/routes/__init__.py`: Routing packages mapping.
 - `backend/api/routes/sessions.py`: API routes handling review session initialization and tracking.
 - `backend/api/routes/review.py`: API routes managing human-in-the-loop audit actions (approve, edit, reject).
@@ -66,11 +68,21 @@
 ## Test Suite (`tests/`)
 - `tests/__init__.py`: Test package root.
 - `tests/conftest.py`: Pytest shared fixtures for mocking Bedrock models and MCP server calls.
+- `tests/api/__init__.py`: Unit tests package mapping for backend API service.
+- `tests/api/test_main.py`: Integration tests for FastAPI application core endpoints and CORS.
+- `tests/api/test_session_manager.py`: Unit tests for SessionManager state storage and file management.
+- `tests/api/test_sessions.py`: Integration tests for session upload, status tracking, and audit execution routes.
+- `tests/api/test_review.py`: Integration tests for verdict inspection, HITL decision recording, and redline document download.
+- `tests/api/test_reports.py`: Integration tests for audit report export endpoints.
+- `tests/api/test_api_e2e.py`: End-to-end integration tests verifying full REST API lifecycle with real multi-agent pipeline.
 - `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
 - `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.
 - `tests/agents/test_auditor.py`: Unit tests for Auditor Agent verdict classification.
+- `tests/agents/test_auditor_e2e.py`: End-to-end integration test for document auditing against playbooks.
 - `tests/agents/test_redliner.py`: Unit tests for Redliner Agent edit instructions.
 - `tests/agents/test_critic.py`: Unit tests for Critic Agent grounding verification.
+- `tests/agents/test_agent_factory.py`: Unit tests for AgentFactory model mapping and Bedrock client resolution.
+- `tests/agents/test_sdk_integration.py`: End-to-end integration tests for multi-agent reasoning, SDK configurations, and HITL document finalization.
 - `tests/ingestion/__init__.py`: Unit tests package mapping for ingestion pipeline.
 - `tests/ingestion/test_docx_parser.py`: Unit tests for document parser and IR extraction.
 - `tests/ingestion/test_pdf_parser.py`: Unit tests for PDF parser.
@@ -80,6 +92,8 @@
 - `tests/ingestion/test_pipeline.py`: Integration tests for end-to-end contract document ingestion.
 - `tests/redlining/__init__.py`: Unit tests package mapping for redlining and XML surgery.
 - `tests/redlining/test_docx_redline_engine.py`: Unit tests for OOXML tracked-changes insertion.
+- `tests/redlining/test_redlining_e2e.py`: End-to-end integration test for document auditing, redlining, and OOXML tracked-changes mutation.
+- `tests/redlining/test_redlining_edge_cases.py`: Unit tests for edge cases in redline mutation, diff HTML, and missing clause actions.
 - `tests/retrieval/__init__.py`: Unit tests package mapping for vector store search.
 - `tests/retrieval/test_vector_store.py`: Unit tests for FAISS indexing and retrieval.
 - `tests/mcp_servers/__init__.py`: Unit tests package mapping for MCP servers.
@@ -91,5 +105,14 @@
 - `frontend/tailwind.config.ts`: Tailwind CSS design configuration.
 - `frontend/postcss.config.mjs`: PostCSS configuration for styling.
 - `frontend/next.config.ts`: Next.js system configuration.
+- `frontend/src/lib/types.ts`: TypeScript type definitions matching backend REST API models.
+- `frontend/src/lib/api.ts`: API client functions connecting to the FastAPI backend service.
+- `frontend/src/components/Navbar.tsx`: Header navigation bar with backend API health status indicator.
+- `frontend/src/components/UploadCard.tsx`: Contract document upload drag-and-drop component with playbook selection.
+- `frontend/src/components/DiffView.tsx`: Text diff comparison displaying original contract text and proposed redline language.
+- `frontend/src/components/ClauseCard.tsx`: Per-clause verdict card with risk indicators and human review action buttons.
+- `frontend/src/components/ReportViewer.tsx`: Structured summary card displaying document risk metrics, Critic grounding score, and session history log.
 - `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping.
 - `frontend/src/app/page.tsx`: Landing page and visual UI component interface.
+- `frontend/src/app/review/[sessionId]/page.tsx`: Interactive review workspace for clause auditing, HITL actions, and redline document finalization.
+- `frontend/src/app/reports/[sessionId]/page.tsx`: Audit summary report page visualizing document risk metrics and Critic grounding traces.

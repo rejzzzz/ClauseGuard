@@ -107,14 +107,35 @@ def ingest_playbook(file_path: Path, output_index_dir: Path, embedder: BedrockEm
     
     return output_index_dir
 
+def ensure_default_playbook_index(playbook_name: str = "sample_vendor_msa") -> Path:
+    """
+    Ensures that the default playbook FAISS index exists on disk.
+    If absent, builds it from backend/config/playbooks/<playbook_name>.md.
+    """
+    project_root = Path(__file__).resolve().parents[3]
+    playbooks_dir = project_root / "backend" / "config" / "playbooks"
+    source_file = playbooks_dir / f"{playbook_name}.md"
+    index_dir = playbooks_dir / f"{playbook_name}_index"
+
+    if not index_dir.exists() and source_file.exists():
+        ingest_playbook(source_file, index_dir)
+        
+    return index_dir
+
+
 def main():
     parser = argparse.ArgumentParser(description="Ingest legal playbooks into local FAISS index.")
-    parser.add_argument("--input", required=True, help="Path to input playbook file (.md, .docx, .pdf)")
-    parser.add_argument("--output-dir", required=True, help="Path to save index directory")
+    parser.add_argument("--input", required=False, help="Path to input playbook file (.md, .docx, .pdf)")
+    parser.add_argument("--output-dir", required=False, help="Path to save index directory")
     args = parser.parse_args()
     
-    ingest_playbook(Path(args.input), Path(args.output_dir))
-    print(f"Playbook successfully indexed at: {args.output_dir}")
+    if args.input and args.output_dir:
+        ingest_playbook(Path(args.input), Path(args.output_dir))
+        print(f"Playbook successfully indexed at: {args.output_dir}")
+    else:
+        out = ensure_default_playbook_index("sample_vendor_msa")
+        print(f"Default playbook successfully verified/indexed at: {out}")
 
 if __name__ == "__main__":
     main()
+
