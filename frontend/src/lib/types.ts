@@ -136,3 +136,43 @@ export interface AuditReportResponse {
     metadata: Record<string, unknown>;
   }>;
 }
+
+export interface PastDocumentItem {
+  id: string;
+  sessionId: string;
+  contractName: string;
+  playbookName: string;
+  fileType: 'docx' | 'pdf';
+  uploadDate: string;
+  clauseCount: number;
+  deviationsCount: number;
+  overallRisk: SeverityEnum;
+  status: 'COMPLETED' | 'AWAITING_HUMAN' | 'PROCESSING';
+  criticScore: number;
+}
+
+export interface AuditSummaryMetrics {
+  totalAudits: number;
+  overallRiskScore: number;
+  compliancePassRate: number;
+  totalRedlines: number;
+  criticalFlags: number;
+}
+
+export interface RiskCategoryScore {
+  category: string;
+  score: number;
+  status: 'COMPLIANT' | 'DEVIATION' | 'HIGH_RISK';
+}
+
+export interface AgentChatMessage {
+  id: string;
+  agentRole: 'Orchestrator' | 'Auditor' | 'Redliner' | 'Critic' | 'User';
+  agentName: string;
+  avatarColor: string;
+  timestamp: string;
+  message: string;
+  clauseId?: string;
+  citationId?: string;
+}
+

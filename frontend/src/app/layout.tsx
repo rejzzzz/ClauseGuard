@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "@/components/Navbar";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import AppShell from "@/components/AppShell";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,9 +13,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const playfairSerif = Playfair_Display({
+  variable: "--font-playfair-serif",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "ClauseGuard — Autonomous Multi-Agent Contract Auditing",
-  description: "Autonomous contract auditing, playbook grounding, and tracked-changes redlining.",
+  description: "Institutional multi-agent contract auditing, playbook citation grounding, and native OOXML tracked-changes redlining.",
 };
 
 export default function RootLayout({
@@ -26,11 +31,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${playfairSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100">
-        <Navbar />
-        <main className="flex-1 flex flex-col">{children}</main>
+      <body className="h-full bg-slate-50 text-slate-900 font-sans">
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

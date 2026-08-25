@@ -105,14 +105,30 @@
 - `frontend/tailwind.config.ts`: Tailwind CSS design configuration.
 - `frontend/postcss.config.mjs`: PostCSS configuration for styling.
 - `frontend/next.config.ts`: Next.js system configuration.
-- `frontend/src/lib/types.ts`: TypeScript type definitions matching backend REST API models.
+- `frontend/src/lib/types.ts`: TypeScript type definitions matching backend REST API models and frontend metrics.
 - `frontend/src/lib/api.ts`: API client functions connecting to the FastAPI backend service.
+- `frontend/src/lib/mockData.ts`: Pre-populated past contract sessions, audit metrics, and multi-agent chat logs.
 - `frontend/src/components/Navbar.tsx`: Header navigation bar with backend API health status indicator.
+- `frontend/src/components/AppShell.tsx`: Application shell component managing conditional layouts between public landing page and workspace.
+- `frontend/src/components/LandingNavbar.tsx`: Full-width h-20 header navigation bar for public landing page.
+- `frontend/src/components/LandingFooter.tsx`: Multi-column footer component for public landing page.
+- `frontend/src/components/SidebarNav.tsx`: Fixed-position navigation sidebar for workspace application pages.
+- `frontend/src/components/TopHeader.tsx`: Workspace top header displaying backend API status and quick actions.
+- `frontend/src/components/HeroSection.tsx`: Landing page hero component featuring an interactive tracked-changes live preview.
+- `frontend/src/components/AgentPipelineVisualizer.tsx`: Interactive multi-agent architecture breakdown component.
+- `frontend/src/components/AgentChatLog.tsx`: Multi-agent step-by-step reasoning transcript viewer component.
 - `frontend/src/components/UploadCard.tsx`: Contract document upload drag-and-drop component with playbook selection.
 - `frontend/src/components/DiffView.tsx`: Text diff comparison displaying original contract text and proposed redline language.
 - `frontend/src/components/ClauseCard.tsx`: Per-clause verdict card with risk indicators and human review action buttons.
 - `frontend/src/components/ReportViewer.tsx`: Structured summary card displaying document risk metrics, Critic grounding score, and session history log.
-- `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping.
-- `frontend/src/app/page.tsx`: Landing page and visual UI component interface.
+- `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping, and app shell.
+- `frontend/src/app/page.tsx`: Clean general marketing landing page showcasing product capabilities and agent architecture.
+- `frontend/src/app/upload/page.tsx`: Dedicated contract document upload and audit session creation workspace page.
+- `frontend/src/app/dashboard/page.tsx`: Executive legal intelligence and contract audit dashboard.
+- `frontend/src/app/documents/page.tsx`: Past contract audit documents repository and inspection view.
+- `frontend/src/app/chats/page.tsx`: Multi-agent reasoning chat log and custom guidance interface.
 - `frontend/src/app/review/[sessionId]/page.tsx`: Interactive review workspace for clause auditing, HITL actions, and redline document finalization.
 - `frontend/src/app/reports/[sessionId]/page.tsx`: Audit summary report page visualizing document risk metrics and Critic grounding traces.
+
+
+
