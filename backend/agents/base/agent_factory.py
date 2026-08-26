@@ -1,6 +1,6 @@
-# Shared model initialization and Strands Agent client generation.
 import os
 from typing import Dict, Any, Optional
+from backend.config.settings import settings
 
 class AgentFactory:
     """
@@ -9,13 +9,13 @@ class AgentFactory:
     """
     MODEL_MAP = {
         "claude-sonnet": "anthropic.claude-3-5-sonnet-20240620-v1:0",
-        "claude-haiku": "anthropic.claude-3-haiku-20240307-v1:0",
-        "titan-embed": "amazon.titan-embed-text-v1",
+        "claude-haiku": settings.BEDROCK_LLM_MODEL_ID,
+        "titan-embed": settings.BEDROCK_EMBEDDING_MODEL_ID,
     }
 
     DEFAULT_PARAMS = {
-        "temperature": 0.1,
-        "max_tokens": 4096,
+        "temperature": settings.LLM_TEMPERATURE,
+        "max_tokens": settings.LLM_MAX_TOKENS,
         "top_p": 0.9,
     }
 
@@ -37,7 +37,7 @@ class AgentFactory:
         Generates configuration dictionary for Strands/Bedrock Agent client initialization.
         """
         model_id = cls.resolve_model_id(model_alias)
-        region = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
+        region = settings.AWS_DEFAULT_REGION
         
         config = {
             "agent_role": agent_role,
@@ -54,7 +54,7 @@ class AgentFactory:
         """
         try:
             import boto3
-            region = region_name or os.getenv("AWS_DEFAULT_REGION", "us-east-1")
+            region = region_name or settings.AWS_DEFAULT_REGION
             return boto3.client("bedrock-runtime", region_name=region)
         except Exception:
             return None

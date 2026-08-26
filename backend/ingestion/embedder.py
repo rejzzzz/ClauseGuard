@@ -3,20 +3,28 @@ import json
 import hashlib
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
-from typing import List
+from typing import List, Optional
+from backend.config.settings import settings
 
 class BedrockEmbedder:
     """
     Client wrapper for Amazon Bedrock Titan Embeddings.
     Includes a deterministic offline fallback vector generator when AWS credentials are invalid or absent.
     """
-    def __init__(self, region_name: str = "us-east-1", model_id: str = "amazon.titan-embed-text-v1", dimension: int = 1536):
+    def __init__(
+        self, 
+        region_name: Optional[str] = None, 
+        model_id: Optional[str] = None, 
+        dimension: Optional[int] = None
+    ):
+        self.region_name = region_name or settings.AWS_DEFAULT_REGION
+        self.model_id = model_id or settings.BEDROCK_EMBEDDING_MODEL_ID
+        self.dimension = dimension or settings.EMBEDDING_DIMENSION
+        
         self.client = boto3.client(
             service_name="bedrock-runtime",
-            region_name=region_name
+            region_name=self.region_name
         )
-        self.model_id = model_id
-        self.dimension = dimension
         
     def _fallback_embedding(self, text: str) -> List[float]:
         """Generates a deterministic normalized vector using SHA256 hashing."""

@@ -1,20 +1,13 @@
-# SQLAlchemy database configuration and engine initialization for Supabase PostgreSQL.
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from backend.config.settings import settings
 
-# Ensure .env is loaded
-env_path = Path(__file__).resolve().parent.parent.parent / ".env"
-if env_path.exists():
-    load_dotenv(dotenv_path=env_path, override=True)
-
-# Resolve connection URI
+# Resolve connection URI from settings
 raw_uri = (
-    os.getenv("DB_CONNECTION_URI") or 
-    os.getenv("DB_CONNECTION_STRING") or 
-    os.getenv("DATABASE_URL") or 
+    settings.DB_CONNECTION_URI or 
+    settings.DATABASE_URL or 
     "sqlite:///data/clauseguard.db"
 )
 

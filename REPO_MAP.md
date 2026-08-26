@@ -9,7 +9,8 @@
 - `REPO_MAP.md`: This file; a directory of codebase files and their purpose.
 - `requirements.txt`: Python package dependencies.
 - `info.md`: Virtual environment activation quickstart.
-- `.env`: Environment variables configuration template.
+- `.env`: Active environment variables configuration.
+- `.env.example`: Environment variables template for Bedrock, Supabase, CORS, models, and file paths.
 - `.gitignore`: Files and folders ignored by git version control.
 
 ## Backend Service (`backend/`)

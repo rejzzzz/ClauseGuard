@@ -4,6 +4,7 @@ import threading
 from pathlib import Path
 from typing import Dict, Optional, List
 
+from backend.config.settings import settings
 from backend.agents.orchestrator.state_machine import SessionContext, AuditStateMachine
 from backend.db.base import SessionLocal, init_db
 from backend.db.repository import (
@@ -19,7 +20,7 @@ class SessionManager:
     Thread-safe session store managing review session contexts and syncing with database repository.
     """
     def __init__(self, base_dir: Optional[Path] = None):
-        self.base_dir = base_dir or Path("data/sessions")
+        self.base_dir = base_dir or settings.SESSION_STORAGE_DIR
         self.base_dir.mkdir(parents=True, exist_ok=True)
         self._sessions: Dict[str, SessionContext] = {}
         self._lock = threading.Lock()
@@ -32,18 +33,19 @@ class SessionManager:
         self,
         contract_path: str,
         contract_name: str,
-        playbook_name: str = "sample_vendor_msa",
+        playbook_name: Optional[str] = None,
         session_id: Optional[str] = None
     ) -> SessionContext:
         """
         Creates and stores a new review session context in memory and database.
         """
         sid = session_id or f"session_{uuid.uuid4().hex[:8]}"
+        pb_name = playbook_name or settings.DEFAULT_PLAYBOOK_NAME
         context = SessionContext(
             session_id=sid,
             contract_path=contract_path,
             contract_name=contract_name,
-            playbook_name=playbook_name
+            playbook_name=pb_name
         )
         session_dir = self.get_session_dir(sid)
         session_dir.mkdir(parents=True, exist_ok=True)

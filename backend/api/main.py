@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from backend.config.settings import settings
 from backend.db import init_db
 from backend.api.routes import sessions, review, reports, chats
 
@@ -34,12 +35,8 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware configuration allowing local frontend development origins
-origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-]
+# CORS middleware configuration using settings
+origins = settings.cors_origins_list
 
 app.add_middleware(
     CORSMiddleware,

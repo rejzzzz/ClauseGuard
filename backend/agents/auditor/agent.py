@@ -1,6 +1,7 @@
 # Auditor Agent (Paralegal) that classifies contract clauses against legal playbooks.
 from typing import List, Dict, Any, Optional
 
+from backend.config.settings import settings
 from backend.mcp_servers.playbook_server.server import playbook_search
 from backend.agents.auditor.verdict_schema import (
     ClauseVerdict,
@@ -14,18 +15,19 @@ class AuditorAgent:
     Paralegal Auditor Agent responsible for evaluating contract clauses against 
     versioned playbook rules via MCP playbook search.
     """
-    def __init__(self, model_name: str = "claude-haiku"):
-        self.model_name = model_name
+    def __init__(self, model_name: Optional[str] = None):
+        self.model_name = model_name or settings.BEDROCK_LLM_MODEL_ID
 
     def audit_clause(
         self, 
         clause_chunk: Dict[str, Any], 
-        playbook_name: str = "sample_vendor_msa",
+        playbook_name: Optional[str] = None,
         clause_id: Optional[str] = None
     ) -> ClauseVerdict:
         """
         Audits a single contract clause chunk against the specified playbook.
         """
+        target_playbook = playbook_name or settings.DEFAULT_PLAYBOOK_NAME
         text = clause_chunk.get("text", "")
         meta = clause_chunk.get("metadata", {})
         heading_title = meta.get("heading_title", "")
@@ -34,7 +36,7 @@ class AuditorAgent:
         cid = clause_id or f"clause_{meta.get('source', 'doc')}_{meta.get('heading_title', 'section')}"
         
         # Search relevant playbook rules via MCP tool
-        search_response = playbook_search(query=text, top_k=3, playbook_name=playbook_name)
+        search_response = playbook_search(query=text, top_k=3, playbook_name=target_playbook)
         matches = search_response.get("matches", [])
         
         if not matches:
