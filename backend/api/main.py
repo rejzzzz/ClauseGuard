@@ -7,7 +7,16 @@ from fastapi.responses import JSONResponse
 
 from backend.config.settings import settings
 from backend.db import init_db
-from backend.api.routes import sessions, review, reports, chats
+from backend.api.routes import (
+    sessions,
+    review,
+    reports,
+    chats,
+    cases,
+    case_documents,
+    case_threads,
+    case_timeline,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,8 +39,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="ClauseGuard API",
-    description="Autonomous Multi-Agent Contract Auditing & Redlining System REST API",
-    version="1.0.0",
+    description="Autonomous Multi-Agent Contract Auditing & Case-Based Legal Intelligence Workbench REST API",
+    version="2.0.0",
     lifespan=lifespan
 )
 
@@ -55,11 +64,17 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "Internal server error occurred."}
     )
 
-# Routers
+# Routers - Legacy Contract Review Sessions
 app.include_router(sessions.router)
 app.include_router(review.router)
 app.include_router(reports.router)
 app.include_router(chats.router)
+
+# Routers - Case-Based Workbench
+app.include_router(cases.router)
+app.include_router(case_documents.router)
+app.include_router(case_threads.router)
+app.include_router(case_timeline.router)
 
 @app.get("/health", tags=["system"])
 async def health_check():
