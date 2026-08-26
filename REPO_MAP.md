@@ -53,13 +53,18 @@
 - `backend/mcp_servers/playbook_server/server.py`: Playbook MCP server exposing search and document retrieval tools.
 - `backend/mcp_servers/playbook_server/schemas.py`: Playbook document and query response schemas.
 - `backend/mcp_servers/playbook_server/playbook_ingest.py`: CLI command script for parsing and versioning playbook text files.
+- `backend/db/__init__.py`: Database package initializer.
+- `backend/db/base.py`: SQLAlchemy engine, session maker, and database metadata initializer.
+- `backend/db/models.py`: Declarative ORM models for sessions, decisions, documents, and chat messages.
+- `backend/db/repository.py`: Database access layer managing CRUD persistence for review sessions, HITL decisions, and agent chat transcripts.
 - `backend/api/__init__.py`: Backend API routing package mapping.
-- `backend/api/main.py`: FastAPI app entrypoint defining middleware, logging, and routers.
-- `backend/api/session_manager.py`: Thread-safe session store managing review session contexts and uploaded/generated file paths.
+- `backend/api/main.py`: FastAPI app entrypoint defining middleware, logging, DB initialization, and routers.
+- `backend/api/session_manager.py`: Thread-safe session store managing review session contexts and syncing with database repository.
 - `backend/api/routes/__init__.py`: Routing packages mapping.
 - `backend/api/routes/sessions.py`: API routes handling review session initialization and tracking.
 - `backend/api/routes/review.py`: API routes managing human-in-the-loop audit actions (approve, edit, reject).
 - `backend/api/routes/reports.py`: API routes managing exportable audit reports.
+- `backend/api/routes/chats.py`: API routes handling multi-agent reasoning chat logs and interactive user messaging.
 - `backend/api/models.py`: Pydantic models defining REST API request and response schemas.
 - `backend/config/__init__.py`: Config modules package mapping.
 - `backend/config/settings.py`: Global project configuration loading settings from environment variables.
@@ -74,6 +79,7 @@
 - `tests/api/test_sessions.py`: Integration tests for session upload, status tracking, and audit execution routes.
 - `tests/api/test_review.py`: Integration tests for verdict inspection, HITL decision recording, and redline document download.
 - `tests/api/test_reports.py`: Integration tests for audit report export endpoints.
+- `tests/api/test_chats.py`: Unit tests for chat log API endpoints and database persistence.
 - `tests/api/test_api_e2e.py`: End-to-end integration tests verifying full REST API lifecycle with real multi-agent pipeline.
 - `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
 - `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.

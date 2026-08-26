@@ -137,3 +137,32 @@ export async function getAuditReport(sessionId: string): Promise<AuditReportResp
   const res = await fetch(`${API_BASE_URL}/api/sessions/${sessionId}/report`);
   return handleResponse<AuditReportResponse>(res);
 }
+
+/**
+  Fetches multi-agent and user reasoning chat logs for a session.
+ */
+export async function fetchChatLogs(sessionId: string) {
+  const res = await fetch(`${API_BASE_URL}/chats/${sessionId}`);
+  return handleResponse(res);
+}
+
+/**
+  Sends a user or agent chat message for a session.
+ */
+export async function sendChatMessage(sessionId: string, messagePayload: {
+  message: string;
+  agent_role?: string;
+  agent_name?: string;
+  avatar_color?: string;
+  clause_id?: string;
+  citation_id?: string;
+}) {
+  const res = await fetch(`${API_BASE_URL}/chats/${sessionId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(messagePayload)
+  });
+  return handleResponse(res);
+}

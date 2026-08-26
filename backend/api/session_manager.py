@@ -1,21 +1,32 @@
-# Session store managing active audit sessions, file paths, state machine persistence, and HITL state.
+# Session store managing active audit sessions, file paths, state machine persistence, and Supabase DB sync.
 import uuid
 import threading
 from pathlib import Path
 from typing import Dict, Optional, List
 
 from backend.agents.orchestrator.state_machine import SessionContext, AuditStateMachine
+from backend.db.base import SessionLocal, init_db
+from backend.db.repository import (
+    db_save_session, 
+    db_get_session, 
+    db_list_sessions, 
+    db_delete_session
+)
 
 
 class SessionManager:
     """
-    Thread-safe session store managing review session contexts and uploaded/generated file paths.
+    Thread-safe session store managing review session contexts and syncing with database repository.
     """
     def __init__(self, base_dir: Optional[Path] = None):
         self.base_dir = base_dir or Path("data/sessions")
         self.base_dir.mkdir(parents=True, exist_ok=True)
         self._sessions: Dict[str, SessionContext] = {}
         self._lock = threading.Lock()
+        try:
+            init_db()
+        except Exception:
+            pass
 
     def create_session(
         self,
@@ -25,7 +36,7 @@ class SessionManager:
         session_id: Optional[str] = None
     ) -> SessionContext:
         """
-        Creates and stores a new review session context.
+        Creates and stores a new review session context in memory and database.
         """
         sid = session_id or f"session_{uuid.uuid4().hex[:8]}"
         context = SessionContext(
@@ -39,38 +50,84 @@ class SessionManager:
 
         with self._lock:
             self._sessions[sid] = context
+
+        # Persist to database
+        try:
+            with SessionLocal() as db:
+                db_save_session(db, context)
+        except Exception as e:
+            print(f"[SessionManager] Warning: DB sync failed on create_session: {e}")
+
         return context
 
     def get_session(self, session_id: str) -> Optional[SessionContext]:
         """
-        Retrieves session context by ID or returns None if not found.
+        Retrieves session context by ID from memory cache or database.
         """
         with self._lock:
-            return self._sessions.get(session_id)
+            if session_id in self._sessions:
+                return self._sessions[session_id]
+
+        # Query database fallback
+        try:
+            with SessionLocal() as db:
+                ctx = db_get_session(db, session_id)
+                if ctx:
+                    with self._lock:
+                        self._sessions[session_id] = ctx
+                    return ctx
+        except Exception as e:
+            print(f"[SessionManager] Warning: DB query failed on get_session: {e}")
+
+        return None
 
     def update_session(self, context: SessionContext) -> SessionContext:
         """
-        Updates an existing session context.
+        Updates an existing session context in memory cache and database.
         """
         with self._lock:
             self._sessions[context.session_id] = context
+
+        # Sync to database
+        try:
+            with SessionLocal() as db:
+                db_save_session(db, context)
+        except Exception as e:
+            print(f"[SessionManager] Warning: DB sync failed on update_session: {e}")
+
         return context
 
     def list_sessions(self) -> List[SessionContext]:
         """
-        Returns a list of all active session contexts.
+        Returns a list of all active session contexts from database or memory cache.
         """
+        try:
+            with SessionLocal() as db:
+                db_sessions = db_list_sessions(db)
+                if db_sessions:
+                    with self._lock:
+                        for s in db_sessions:
+                            self._sessions[s.session_id] = s
+                    return db_sessions
+        except Exception as e:
+            print(f"[SessionManager] Warning: DB query failed on list_sessions: {e}")
+
         with self._lock:
             return list(self._sessions.values())
 
     def delete_session(self, session_id: str) -> bool:
         """
-        Removes session context from memory.
+        Removes session context from memory cache and database.
         """
         with self._lock:
             if session_id in self._sessions:
                 del self._sessions[session_id]
-                return True
+
+        try:
+            with SessionLocal() as db:
+                return db_delete_session(db, session_id)
+        except Exception as e:
+            print(f"[SessionManager] Warning: DB delete failed on delete_session: {e}")
             return False
 
     def get_session_dir(self, session_id: str) -> Path:

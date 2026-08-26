@@ -1,10 +1,12 @@
-# FastAPI app entrypoint defining middleware, logging, and general routers.
+# FastAPI app entrypoint defining middleware, logging, DB initialization, and routers.
 import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from backend.api.routes import sessions, review, reports
+from backend.db import init_db
+from backend.api.routes import sessions, review, reports, chats
 
 logging.basicConfig(
     level=logging.INFO,
@@ -12,10 +14,24 @@ logging.basicConfig(
 )
 logger = logging.getLogger("clauseguard.api")
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    App lifespan context initializing database tables on startup.
+    """
+    logger.info("Initializing ClauseGuard database schema...")
+    try:
+        init_db()
+        logger.info("Database schema successfully initialized.")
+    except Exception as e:
+        logger.warning(f"Database initialization deferred or failed: {e}")
+    yield
+
 app = FastAPI(
     title="ClauseGuard API",
     description="Autonomous Multi-Agent Contract Auditing & Redlining System REST API",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # CORS middleware configuration allowing local frontend development origins
@@ -46,6 +62,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(sessions.router)
 app.include_router(review.router)
 app.include_router(reports.router)
+app.include_router(chats.router)
 
 @app.get("/health", tags=["system"])
 async def health_check():
