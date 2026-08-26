@@ -48,30 +48,30 @@ export default function SidebarNav() {
   ];
 
   return (
-    <aside className="fixed top-0 left-0 bottom-0 w-64 h-screen bg-white border-r border-slate-200 text-slate-700 flex flex-col justify-between z-40 overflow-y-auto hidden md:flex shrink-0">
+    <aside className="fixed top-0 left-0 bottom-0 w-64 h-screen bg-white border-r border-slate-200/90 text-slate-700 flex flex-col justify-between z-40 overflow-y-auto hidden md:flex shrink-0">
       <div>
         {/* Brand Header */}
-        <Link href="/" className="h-20 flex items-center px-6 border-b border-slate-200 space-x-3.5 hover:bg-slate-50/80 transition-colors group">
-          <div className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-base shadow-sm group-hover:bg-slate-800">
+        <Link href="/" className="h-20 flex items-center px-6 border-b border-slate-200/80 space-x-3.5 hover:bg-slate-50/80 transition-colors group">
+          <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-base shadow-sm group-hover:bg-slate-800 transition-colors">
             CG
           </div>
           <div>
             <div className="font-serif font-extrabold text-slate-900 tracking-tight text-base group-hover:text-slate-700">
               ClauseGuard
             </div>
-            <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider -mt-0.5">
+            <div className="text-[10px] uppercase font-mono font-bold text-slate-500 tracking-wider -mt-0.5">
               Legal Counsel Suite
             </div>
           </div>
         </Link>
 
         {/* Action Button */}
-        <div className="px-4 pt-6 pb-2">
+        <div className="px-5 pt-6 pb-3">
           <Link
             href="/upload"
-            className="w-full py-3 px-4 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm flex items-center justify-center space-x-2 transition-all"
+            className="w-full py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm flex items-center justify-center space-x-2 transition-all hover-lift btn-tactile"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
             <span>+ Start New Audit</span>
@@ -79,8 +79,8 @@ export default function SidebarNav() {
         </div>
 
         {/* Core Workspace Navigation */}
-        <div className="px-4 py-4 space-y-1.5">
-          <div className="px-3 pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+        <div className="px-4 py-3 space-y-1">
+          <div className="px-3 pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
             Workspace Tools
           </div>
           {navItems.map((item) => {
@@ -89,13 +89,13 @@ export default function SidebarNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center space-x-3.5 px-3.5 py-3 rounded-lg text-xs font-medium transition-all duration-150 ${
+                className={`flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'bg-slate-100 text-slate-900 font-semibold border-l-2 border-slate-900 shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    ? 'bg-slate-900 text-white shadow-xs font-bold'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                 }`}
               >
-                <span className={isActive ? 'text-slate-900' : 'text-slate-400'}>{item.icon}</span>
+                <span className={isActive ? 'text-emerald-400' : 'text-slate-400'}>{item.icon}</span>
                 <span>{item.label}</span>
               </Link>
             );
@@ -103,12 +103,12 @@ export default function SidebarNav() {
         </div>
 
         {/* Recent Audit Sessions & Case Matters */}
-        <div className="px-4 py-5 border-t border-slate-100 space-y-2.5">
+        <div className="px-4 py-5 border-t border-slate-100 space-y-2">
           <div className="px-3 flex items-center justify-between">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
               Recent Matters & Audits
             </span>
-            <Link href="/documents" className="text-[10px] font-semibold text-slate-500 hover:text-slate-900">
+            <Link href="/documents" className="text-[10px] font-bold text-slate-500 hover:text-slate-900 transition-colors">
               View All
             </Link>
           </div>
@@ -120,18 +120,18 @@ export default function SidebarNav() {
                 <Link
                   key={doc.id}
                   href={`/review/${doc.sessionId}`}
-                  className={`block px-3.5 py-2.5 rounded-lg text-xs transition-all ${
+                  className={`block px-3.5 py-2.5 rounded-xl text-xs transition-all ${
                     isSessionActive
-                      ? 'bg-slate-100 border-l-2 border-slate-900 font-semibold text-slate-900'
-                      : 'hover:bg-slate-50 text-slate-600'
+                      ? 'bg-slate-100 font-bold text-slate-900 border-l-2 border-slate-900'
+                      : 'hover:bg-slate-50/80 text-slate-600'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="truncate font-serif text-[11px] font-semibold text-slate-800 max-w-[135px]">
+                    <span className="truncate font-serif text-xs font-bold text-slate-800 max-w-[135px]">
                       {doc.contractName.split('.')[0]}
                     </span>
                     <span
-                      className={`px-1.5 py-0.2 rounded text-[9px] font-bold ${
+                      className={`px-2 py-0.5 rounded-md text-[9px] font-extrabold ${
                         doc.overallRisk === 'CRITICAL' || doc.overallRisk === 'HIGH'
                           ? 'bg-red-50 text-red-700 border border-red-200'
                           : doc.overallRisk === 'MEDIUM'
@@ -153,12 +153,12 @@ export default function SidebarNav() {
       </div>
 
       {/* Footer Engine Status */}
-      <div className="p-4 m-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-        <div className="flex items-center space-x-2 text-[11px] font-semibold text-slate-800">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+      <div className="p-4 m-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 shadow-2xs">
+        <div className="flex items-center space-x-2 text-xs font-bold text-slate-800">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
           <span>Legal Engine Ready</span>
         </div>
-        <p className="text-[10px] text-slate-500 leading-tight">
+        <p className="text-[10px] text-slate-500 font-mono leading-tight">
           Bedrock · FastMCP FAISS · OOXML Redlines
         </p>
       </div>

@@ -136,7 +136,8 @@ class SessionManager:
         """
         Returns the dedicated storage directory for a given session.
         """
-        s_dir = self.base_dir / session_id
+        clean_sid = session_id.strip()
+        s_dir = self.base_dir / clean_sid
         s_dir.mkdir(parents=True, exist_ok=True)
         return s_dir
 
@@ -145,7 +146,8 @@ class SessionManager:
         Saves uploaded contract file bytes into the session storage directory.
         """
         s_dir = self.get_session_dir(session_id)
-        file_path = s_dir / filename
+        clean_filename = filename.strip()
+        file_path = s_dir / clean_filename
         file_path.write_bytes(content)
         return file_path
 
