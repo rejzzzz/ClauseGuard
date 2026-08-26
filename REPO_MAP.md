@@ -56,8 +56,11 @@
 - `backend/mcp_servers/playbook_server/playbook_ingest.py`: CLI command script for parsing and versioning playbook text files.
 - `backend/db/__init__.py`: Database package initializer.
 - `backend/db/base.py`: SQLAlchemy engine, session maker, and database metadata initializer.
-- `backend/db/models.py`: Declarative ORM models for sessions, decisions, documents, and chat messages.
-- `backend/db/repository.py`: Database access layer managing CRUD persistence for review sessions, HITL decisions, and agent chat transcripts.
+- `backend/db/models.py`: Declarative ORM models for cases, case documents, chunks, threads, messages, timeline events, sessions, decisions, and chat logs.
+- `backend/db/repository.py`: Database access layer managing CRUD persistence for cases, documents, chunks, chat threads, timeline events, review sessions, and chat transcripts.
+- `backend/cases/__init__.py`: Case domain package initializer.
+- `backend/cases/models.py`: Module re-exporting SQLAlchemy ORM models for case entities.
+- `backend/cases/schemas.py`: Pydantic request, response, and domain schemas for cases, documents, chunks, chat threads, messages, and timeline events.
 - `backend/api/__init__.py`: Backend API routing package mapping.
 - `backend/api/main.py`: FastAPI app entrypoint defining middleware, logging, DB initialization, and routers.
 - `backend/api/session_manager.py`: Thread-safe session store managing review session contexts and syncing with database repository.
@@ -105,6 +108,10 @@
 - `tests/retrieval/test_vector_store.py`: Unit tests for FAISS indexing and retrieval.
 - `tests/mcp_servers/__init__.py`: Unit tests package mapping for MCP servers.
 - `tests/mcp_servers/test_playbook_server.py`: Unit tests for FastMCP playbook server tools.
+- `tests/cases/__init__.py`: Test package root for case domain features.
+- `tests/cases/test_models.py`: Unit tests for case-based SQLAlchemy ORM models and relationships.
+- `tests/cases/test_schemas.py`: Unit tests for case-based Pydantic schemas and serialization.
+- `tests/cases/test_repository.py`: Integration tests for database repository CRUD operations for case entities.
 
 ## Frontend Next.js Application (`frontend/`)
 - `frontend/package.json`: Frontend dependency and script configuration.

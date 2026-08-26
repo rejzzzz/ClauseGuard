@@ -21,6 +21,7 @@ scratch/
 outputs/
 temp/
 data/
+docs/
 
 # OS Specific
 .DS_Store

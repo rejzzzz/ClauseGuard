@@ -30,6 +30,7 @@ class Settings(BaseSettings):
 
     # 4. Storage & Directory Paths
     SESSION_STORAGE_DIR: Path = Path("data/sessions")
+    CASE_STORAGE_DIR: Path = Path("data/cases")
     PLAYBOOK_STORAGE_DIR: Path = Path("backend/config/playbooks")
 
     @property
