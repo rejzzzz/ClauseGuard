@@ -5,6 +5,98 @@ export type SeverityEnum = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type RedlineActionEnum = 'REPLACE' | 'INSERT' | 'DELETE' | 'COMMENT';
 export type HumanDecisionEnum = 'APPROVE' | 'REJECT' | 'EDIT';
 
+// ─── CASE-BASED WORKBENCH MODELS ─────────────────────────────
+
+export interface CaseItem {
+  id: string;
+  title: string;
+  description?: string | null;
+  case_type: string;
+  status: 'ACTIVE' | 'ARCHIVED' | 'CLOSED' | string;
+  document_count: number;
+  thread_count: number;
+  event_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CaseCreateRequest {
+  title: string;
+  description?: string | null;
+  case_type?: string;
+  status?: string;
+}
+
+export interface CaseUpdateRequest {
+  title?: string;
+  description?: string | null;
+  case_type?: string;
+  status?: string;
+}
+
+export interface CaseDocumentItem {
+  id: string;
+  case_id: string;
+  filename: string;
+  file_type: string;
+  file_path: string;
+  file_size_bytes: number;
+  page_count: number;
+  doc_category: string;
+  chunk_count: number;
+  ingestion_status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | string;
+  created_at: string;
+}
+
+export interface ChatThreadItem {
+  id: string;
+  case_id: string;
+  title: string;
+  description?: string | null;
+  status: string;
+  message_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CitationItem {
+  document_id: string;
+  filename: string;
+  page_number?: number | null;
+  chunk_id?: string | null;
+  text_excerpt: string;
+}
+
+export interface ThreadMessageItem {
+  id: string;
+  thread_id: string;
+  case_id: string;
+  role: 'user' | 'assistant' | 'system' | string;
+  agent_name: string;
+  content: string;
+  citations_json: CitationItem[];
+  metadata_json: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface TimelineEventItem {
+  id: string;
+  case_id: string;
+  document_id?: string | null;
+  event_date?: string | null;
+  event_date_raw: string;
+  event_summary: string;
+  entities_json: string[];
+  page_number?: number | null;
+  chunk_id?: string | null;
+  confidence: number;
+  is_disputed: boolean;
+  category: 'payment' | 'notice' | 'agreement' | 'litigation' | 'breach' | 'general' | string;
+  created_at: string;
+}
+
+// ─── LEGACY CONTRACT REVIEW MODELS ───────────────────────────
+
 export interface ClauseVerdict {
   clause_id: string;
   heading_title: string;
@@ -175,4 +267,3 @@ export interface AgentChatMessage {
   clauseId?: string;
   citationId?: string;
 }
-

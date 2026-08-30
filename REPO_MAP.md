@@ -165,8 +165,14 @@
 - `frontend/src/components/DiffView.tsx`: Text diff comparison displaying original contract text and proposed redline language.
 - `frontend/src/components/ClauseCard.tsx`: Per-clause verdict card with risk indicators and human review action buttons.
 - `frontend/src/components/ReportViewer.tsx`: Structured summary card displaying document risk metrics, Critic grounding score, and session history log.
+- `frontend/src/components/CaseDocumentUploader.tsx`: Drag-and-drop file uploader and ingestion status manager component for case matters.
+- `frontend/src/components/CaseThreadChat.tsx`: Multi-thread AI research chat component with thread switching and interactive document citation inspector.
+- `frontend/src/components/CaseTimelineView.tsx`: Incident timeline feed and interactive chronological graph component with disputed fact markers.
 - `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping, and app shell.
 - `frontend/src/app/page.tsx`: Clean general marketing landing page showcasing product capabilities and agent architecture.
+- `frontend/src/app/cases/page.tsx`: Case Matters Dashboard page displaying case cards, metrics summary, and search filtering.
+- `frontend/src/app/cases/new/page.tsx`: Case Matter creation workspace page.
+- `frontend/src/app/cases/[caseId]/page.tsx`: Flagship 3-panel Case Workbench workspace integrating documents, multi-thread chat, and incident timeline.
 - `frontend/src/app/upload/page.tsx`: Dedicated contract document upload and audit session creation workspace page.
 - `frontend/src/app/dashboard/page.tsx`: Executive legal intelligence and contract audit dashboard.
 - `frontend/src/app/documents/page.tsx`: Past contract audit documents repository and inspection view.

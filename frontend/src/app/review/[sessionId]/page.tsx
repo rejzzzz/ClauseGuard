@@ -171,12 +171,12 @@ export default function ReviewPage({ params }: ReviewPageProps) {
   }
 
   return (
-    <div className="flex-1 max-w-7xl w-full mx-auto space-y-8 bg-slate-50 text-slate-900 pb-12">
+    <div className="flex-1 w-full space-y-8 bg-slate-50 text-slate-900 pb-12">
       {/* Session Metadata Header */}
-      <div className="bg-white border border-slate-200 rounded-xl p-7 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-7 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-2xs">
         <div className="space-y-1.5">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-serif font-bold text-slate-900">
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900">
               {session.contract_name}
             </h1>
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
@@ -189,12 +189,12 @@ export default function ReviewPage({ params }: ReviewPageProps) {
         </div>
 
         {/* Global Action Controls with Generous Button Spacing */}
-        <div className="flex items-center flex-wrap gap-4">
+        <div className="flex items-center flex-wrap gap-3">
           {(session.current_state === 'UNINITIALIZED' || session.current_state === 'INGESTED') && (
             <button
               onClick={handleRunAudit}
               disabled={auditRunning}
-              className="px-6 py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs rounded-lg transition-all shadow-sm flex items-center gap-2"
+              className="px-6 py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-sm hover-lift btn-tactile flex items-center gap-2"
             >
               {auditRunning ? (
                 <>
@@ -212,7 +212,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
               <button
                 onClick={handleSubmitHitl}
                 disabled={submittingHitl}
-                className="px-5 py-3 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg transition-all shadow-xs"
+                className="px-5 py-3 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-2xs hover-lift btn-tactile"
               >
                 {submittingHitl ? 'Submitting...' : '✓ Submit Review Decisions'}
               </button>
@@ -220,7 +220,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
               <button
                 onClick={handleFinalizeRedline}
                 disabled={finalizing}
-                className="px-5 py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs rounded-lg transition-all shadow-xs"
+                className="px-5 py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-2xs hover-lift btn-tactile"
               >
                 {finalizing ? 'Generating .docx...' : '📝 Generate Redlined Document'}
               </button>
@@ -231,7 +231,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
             <a
               href={getDownloadUrl(sessionId)}
               download
-              className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition-all shadow-xs flex items-center gap-2"
+              className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-2 hover-lift btn-tactile"
             >
               ⬇️ Download Redlined .docx
             </a>
@@ -239,7 +239,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
           <Link
             href={`/reports/${sessionId}`}
-            className="px-5 py-3 border border-slate-300 hover:bg-slate-100 text-slate-800 font-bold text-xs rounded-lg transition-all shadow-2xs"
+            className="px-5 py-3 border border-slate-300 hover:bg-slate-100 text-slate-800 font-bold text-xs rounded-xl transition-all shadow-2xs"
           >
             📊 View Audit Report
           </Link>

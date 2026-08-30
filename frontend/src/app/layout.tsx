@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Plus_Jakarta_Sans, Source_Serif_4, JetBrains_Mono } from "next/font/google";
 import AppShell from "@/components/AppShell";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
-const playfairSerif = Playfair_Display({
-  variable: "--font-playfair-serif",
+const sourceSerif4 = Source_Serif_4({
+  variable: "--font-source-serif-4",
   subsets: ["latin"],
 });
 
@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${playfairSerif.variable} h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} ${sourceSerif4.variable} h-full antialiased`}
     >
       <body className="h-full bg-slate-50 text-slate-900 font-sans">
         <AppShell>{children}</AppShell>

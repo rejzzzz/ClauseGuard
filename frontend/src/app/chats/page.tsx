@@ -36,16 +36,16 @@ export default function ChatsPage() {
   };
 
   return (
-    <div className="flex-1 space-y-6 bg-slate-50 text-slate-900 flex flex-col h-[calc(100vh-6rem)] max-w-5xl mx-auto w-full">
+    <div className="flex-1 space-y-6 bg-slate-50 text-slate-900 flex flex-col h-[calc(100vh-10rem)] w-full pb-4">
       {/* Header */}
       <div className="border-b border-slate-200 pb-4 shrink-0">
-        <span className="px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-2xs">
+        <span className="px-3.5 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-2xs">
           Multi-Agent Reasoning Log
         </span>
         <h1 className="text-3xl font-serif font-extrabold tracking-tight mt-2 text-slate-900">
           Agent Conversation & Tool Handoffs
         </h1>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-slate-500 mt-1 font-sans">
           Inspect execution traces across Orchestrator, Paralegal, Drafter, and Critic agents.
         </p>
       </div>
@@ -62,11 +62,11 @@ export default function ChatsPage() {
           placeholder="Input custom legal audit guidance or query agent reasoning trace..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          className="flex-1 bg-white border border-slate-300 rounded-lg px-4 py-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
+          className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
         />
         <button
           type="submit"
-          className="px-5 py-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition-all shrink-0"
+          className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition-all hover-lift btn-tactile shrink-0"
         >
           Send Guidance
         </button>

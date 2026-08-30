@@ -17,7 +17,7 @@ export default function DocumentsPage() {
   });
 
   return (
-    <div className="flex-1 space-y-8 bg-slate-50 text-slate-900 pb-12">
+    <div className="flex-1 space-y-8 bg-slate-50 text-slate-900 pb-12 w-full">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
@@ -34,21 +34,24 @@ export default function DocumentsPage() {
 
         <Link
           href="/upload"
-          className="px-5 py-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition-all text-center self-start sm:self-auto"
+          className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition-all text-center self-start sm:self-auto hover-lift btn-tactile flex items-center space-x-2"
         >
-          + New Audit Session
+          <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          </svg>
+          <span>+ New Audit Session</span>
         </Link>
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/90 shadow-2xs">
         <div className="w-full sm:w-80 relative">
           <input
             type="text"
             placeholder="Search by contract name or playbook..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900"
           />
         </div>
 
@@ -59,9 +62,9 @@ export default function DocumentsPage() {
               <button
                 key={risk}
                 onClick={() => setSelectedRisk(risk)}
-                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
                   selectedRisk === risk
-                    ? 'bg-slate-900 text-white shadow-xs'
+                    ? 'bg-slate-900 text-white shadow-2xs font-bold'
                     : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200'
                 }`}
               >
@@ -73,10 +76,10 @@ export default function DocumentsPage() {
       </div>
 
       {/* Documents Table */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+      <div className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="text-[11px] font-semibold text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
+          <table className="w-full text-left text-xs min-w-[700px]">
+            <thead className="text-[11px] font-semibold text-slate-500 uppercase bg-slate-50/80 border-b border-slate-200">
               <tr>
                 <th className="py-4 px-6">Document</th>
                 <th className="py-4 px-6">Playbook</th>
@@ -107,7 +110,7 @@ export default function DocumentsPage() {
                   </td>
                   <td className="py-4.5 px-6">
                     <span
-                      className={`px-2.5 py-1 rounded text-[10px] font-bold ${
+                      className={`px-2.5 py-1 rounded-md text-[10px] font-bold ${
                         doc.overallRisk === 'CRITICAL' || doc.overallRisk === 'HIGH'
                           ? 'bg-red-50 text-red-800 border border-red-200'
                           : doc.overallRisk === 'MEDIUM'
@@ -122,13 +125,13 @@ export default function DocumentsPage() {
                     <div className="flex items-center justify-end gap-3.5">
                       <button
                         onClick={() => setSelectedDoc(doc)}
-                        className="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs transition-all border border-slate-200"
+                        className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs transition-all border border-slate-200"
                       >
                         Quick Inspect
                       </button>
                       <Link
                         href={`/review/${doc.sessionId}`}
-                        className="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs transition-all inline-block"
+                        className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-2xs transition-all inline-block"
                       >
                         Open Workspace
                       </Link>
@@ -144,7 +147,7 @@ export default function DocumentsPage() {
       {/* Quick Inspection Modal */}
       {selectedDoc && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-6">
-          <div className="bg-white border border-slate-200 rounded-xl max-w-xl w-full p-8 space-y-6 shadow-2xl relative text-slate-900">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-xl w-full p-8 space-y-6 shadow-2xl relative text-slate-900">
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <h3 className="text-xl font-serif font-bold text-slate-900">Document Overview</h3>
               <button
@@ -177,13 +180,13 @@ export default function DocumentsPage() {
             <div className="flex items-center justify-end gap-3.5 pt-3">
               <Link
                 href={`/reports/${selectedDoc.sessionId}`}
-                className="px-4 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs border border-slate-200 transition-all"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs border border-slate-200 transition-all"
               >
                 Export Audit Report JSON
               </Link>
               <Link
                 href={`/review/${selectedDoc.sessionId}`}
-                className="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all"
+                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all shadow-2xs"
               >
                 Launch Review Workspace →
               </Link>

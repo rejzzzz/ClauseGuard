@@ -58,7 +58,7 @@ export default function ReportPage({ params }: ReportPageProps) {
   }
 
   return (
-    <div className="flex-1 max-w-7xl w-full mx-auto space-y-8 bg-slate-50 text-slate-900 pb-12">
+    <div className="flex-1 w-full space-y-8 bg-slate-50 text-slate-900 pb-12">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
@@ -72,7 +72,7 @@ export default function ReportPage({ params }: ReportPageProps) {
 
         <Link
           href={`/review/${sessionId}`}
-          className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition-all shadow-sm"
+          className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shadow-sm hover-lift btn-tactile"
         >
           ← Return to Clause Review Workspace
         </Link>

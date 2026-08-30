@@ -1,20 +1,39 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MOCK_PAST_DOCUMENTS } from '@/lib/mockData';
+import { listCases } from '@/lib/api';
+import { CaseItem } from '@/lib/types';
 
-export default function SidebarNav() {
+interface SidebarNavProps {
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
+}
+
+export default function SidebarNav({ mobileOpen = false, onCloseMobile }: SidebarNavProps) {
   const pathname = usePathname();
+  const [cases, setCases] = useState<CaseItem[]>([]);
+
+  useEffect(() => {
+    async function loadCases() {
+      try {
+        const data = await listCases('ACTIVE');
+        setCases(data.slice(0, 5));
+      } catch (err) {
+        console.warn('Backend offline or error listing cases:', err);
+      }
+    }
+    loadCases();
+  }, [pathname]);
 
   const navItems = [
     {
-      label: 'New Audit Session',
-      href: '/upload',
+      label: 'Case Matters',
+      href: '/cases',
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
       ),
     },
@@ -28,7 +47,16 @@ export default function SidebarNav() {
       ),
     },
     {
-      label: 'Past Document Vault',
+      label: 'Contract Auditor Tool',
+      href: '/upload',
+      icon: (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+        </svg>
+      ),
+    },
+    {
+      label: 'Past Audit Vault',
       href: '/documents',
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -47,34 +75,46 @@ export default function SidebarNav() {
     },
   ];
 
-  return (
-    <aside className="fixed top-0 left-0 bottom-0 w-64 h-screen bg-white border-r border-slate-200/90 text-slate-700 flex flex-col justify-between z-40 overflow-y-auto hidden md:flex shrink-0">
+  const sidebarContent = (
+    <div className="flex flex-col justify-between h-full">
       <div>
         {/* Brand Header */}
-        <Link href="/" className="h-20 flex items-center px-6 border-b border-slate-200/80 space-x-3.5 hover:bg-slate-50/80 transition-colors group">
-          <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-base shadow-sm group-hover:bg-slate-800 transition-colors">
-            CG
-          </div>
-          <div>
-            <div className="font-serif font-extrabold text-slate-900 tracking-tight text-base group-hover:text-slate-700">
-              ClauseGuard
+        <div className="flex items-center justify-between px-6 h-20 border-b border-slate-200/80">
+          <Link href="/" onClick={onCloseMobile} className="flex items-center space-x-3.5 group">
+            <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-base shadow-sm group-hover:bg-slate-800 transition-colors">
+              CG
             </div>
-            <div className="text-[10px] uppercase font-mono font-bold text-slate-500 tracking-wider -mt-0.5">
-              Legal Counsel Suite
+            <div>
+              <div className="font-serif font-extrabold text-slate-900 tracking-tight text-base group-hover:text-slate-700">
+                ClauseGuard
+              </div>
+              <div className="text-[10px] uppercase font-mono font-bold text-slate-500 tracking-wider -mt-0.5">
+                Legal Counsel Suite
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+          {onCloseMobile && (
+            <button
+              onClick={onCloseMobile}
+              className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              aria-label="Close Mobile Sidebar"
+            >
+              ✕
+            </button>
+          )}
+        </div>
 
         {/* Action Button */}
         <div className="px-5 pt-6 pb-3">
           <Link
-            href="/upload"
+            href="/cases/new"
+            onClick={onCloseMobile}
             className="w-full py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm flex items-center justify-center space-x-2 transition-all hover-lift btn-tactile"
           >
             <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
-            <span>+ Start New Audit</span>
+            <span>+ Start New Case</span>
           </Link>
         </div>
 
@@ -84,11 +124,12 @@ export default function SidebarNav() {
             Workspace Tools
           </div>
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== '/upload' && pathname?.startsWith(item.href));
+            const isActive = pathname === item.href || (item.href !== '/cases' && pathname?.startsWith(item.href));
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={onCloseMobile}
                 className={`flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-semibold transition-all duration-200 ${
                   isActive
                     ? 'bg-slate-900 text-white shadow-xs font-bold'
@@ -102,52 +143,55 @@ export default function SidebarNav() {
           })}
         </div>
 
-        {/* Recent Audit Sessions & Case Matters */}
-        <div className="px-4 py-5 border-t border-slate-100 space-y-2">
+        {/* Active Case Matters */}
+        <div className="px-4 py-4 border-t border-slate-100 space-y-2">
           <div className="px-3 flex items-center justify-between">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
-              Recent Matters & Audits
+              Active Case Matters
             </span>
-            <Link href="/documents" className="text-[10px] font-bold text-slate-500 hover:text-slate-900 transition-colors">
+            <Link
+              href="/cases"
+              onClick={onCloseMobile}
+              className="text-[10px] font-bold text-slate-500 hover:text-slate-900 transition-colors"
+            >
               View All
             </Link>
           </div>
 
           <div className="space-y-1">
-            {MOCK_PAST_DOCUMENTS.slice(0, 4).map((doc) => {
-              const isSessionActive = pathname?.includes(doc.sessionId);
-              return (
-                <Link
-                  key={doc.id}
-                  href={`/review/${doc.sessionId}`}
-                  className={`block px-3.5 py-2.5 rounded-xl text-xs transition-all ${
-                    isSessionActive
-                      ? 'bg-slate-100 font-bold text-slate-900 border-l-2 border-slate-900'
-                      : 'hover:bg-slate-50/80 text-slate-600'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="truncate font-serif text-xs font-bold text-slate-800 max-w-[135px]">
-                      {doc.contractName.split('.')[0]}
-                    </span>
-                    <span
-                      className={`px-2 py-0.5 rounded-md text-[9px] font-extrabold ${
-                        doc.overallRisk === 'CRITICAL' || doc.overallRisk === 'HIGH'
-                          ? 'bg-red-50 text-red-700 border border-red-200'
-                          : doc.overallRisk === 'MEDIUM'
-                          ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                          : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      }`}
-                    >
-                      {doc.overallRisk[0]}
-                    </span>
-                  </div>
-                  <div className="text-[10px] text-slate-400 font-mono truncate mt-0.5">
-                    {doc.playbookName.split(' ')[0]} · {doc.clauseCount} clauses
-                  </div>
-                </Link>
-              );
-            })}
+            {cases.length > 0 ? (
+              cases.map((c) => {
+                const isCaseActive = pathname?.includes(c.id);
+                return (
+                  <Link
+                    key={c.id}
+                    href={`/cases/${c.id}`}
+                    onClick={onCloseMobile}
+                    className={`block px-3.5 py-2.5 rounded-xl text-xs transition-all ${
+                      isCaseActive
+                        ? 'bg-slate-100 font-bold text-slate-900 border-l-2 border-slate-900'
+                        : 'hover:bg-slate-50/80 text-slate-600'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="truncate font-serif text-xs font-bold text-slate-800 max-w-[130px]">
+                        {c.title}
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-200 text-slate-700">
+                        {c.document_count} docs
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-slate-400 font-mono truncate mt-0.5">
+                      {c.case_type} · {c.thread_count} threads
+                    </div>
+                  </Link>
+                );
+              })
+            ) : (
+              <div className="px-3 py-2 text-[11px] text-slate-400 italic">
+                No active cases yet.
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -156,12 +200,34 @@ export default function SidebarNav() {
       <div className="p-4 m-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 shadow-2xs">
         <div className="flex items-center space-x-2 text-xs font-bold text-slate-800">
           <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-          <span>Legal Engine Ready</span>
+          <span>Case Engine Active</span>
         </div>
         <p className="text-[10px] text-slate-500 font-mono leading-tight">
-          Bedrock · FastMCP FAISS · OOXML Redlines
+          Bedrock · Multi-Thread · Citations · Timeline
         </p>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Permanent Sidebar */}
+      <aside className="fixed top-0 left-0 bottom-0 w-64 h-screen bg-white border-r border-slate-200/90 text-slate-700 flex-col justify-between z-40 overflow-y-auto hidden md:flex shrink-0">
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile Drawer Backdrop & Drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          <div
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
+            onClick={onCloseMobile}
+          />
+          <aside className="relative w-72 max-w-[80vw] h-full bg-white text-slate-700 shadow-2xl flex flex-col justify-between overflow-y-auto z-50 animate-in slide-in-from-left duration-200">
+            {sidebarContent}
+          </aside>
+        </div>
+      )}
+    </>
   );
 }

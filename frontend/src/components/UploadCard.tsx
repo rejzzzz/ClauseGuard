@@ -78,7 +78,7 @@ export default function UploadCard({ onUploadSuccess }: UploadCardProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-white border border-slate-200/90 rounded-2xl p-9 sm:p-12 shadow-md glass-card">
+    <div className="w-full bg-white border border-slate-200/90 rounded-2xl p-8 sm:p-10 shadow-2xs glass-card">
       <div className="flex items-center space-x-4 mb-4 border-b border-slate-100 pb-6">
         <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-lg shadow-sm">
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -14,36 +14,41 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full space-y-8 bg-slate-50 text-slate-900">
-      {/* Header Info */}
-      <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-2xs inline-block">
-          New Audit Session
-        </span>
-        <h1 className="text-3xl font-serif font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-          Start a Contract Audit Session
-        </h1>
-        <p className="text-sm text-slate-600 leading-relaxed font-sans">
-          Upload any vendor contract, NDA, or Master Services Agreement (.docx or .pdf) to initiate structure-aware playbook auditing, vector grounding checks, and OOXML redlining.
-        </p>
+    <div className="flex-1 space-y-8 bg-slate-50 text-slate-900 pb-12 w-full">
+      {/* Page Header (Left-aligned, matching /dashboard, /cases, /documents, /chats) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+        <div className="space-y-1">
+          <span className="px-3.5 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-2xs inline-block">
+            Contract Auditor Tool
+          </span>
+          <h1 className="text-3xl font-serif font-extrabold tracking-tight mt-2 text-slate-900 sm:text-4xl">
+            Start a Contract Audit Session
+          </h1>
+          <p className="text-xs text-slate-500 font-sans">
+            Upload vendor contracts, NDAs, or Master Services Agreements (.docx or .pdf) for multi-agent auditing & OOXML redlining.
+          </p>
+        </div>
       </div>
 
-      {/* Upload Form Card */}
-      <UploadCard onUploadSuccess={handleUploadSuccess} />
+      {/* Main Upload Card Container */}
+      <div className="max-w-3xl mx-auto space-y-8 w-full pt-2">
+        {/* Upload Form Card */}
+        <UploadCard onUploadSuccess={handleUploadSuccess} />
 
-      {/* Helper Footer Notes */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl text-center text-xs text-slate-500 pt-6 border-t border-slate-200">
-        <div>
-          <span className="font-semibold text-slate-900 block">1. Structure Parsing</span>
-          <span>Automatic clause tree segmentation</span>
-        </div>
-        <div>
-          <span className="font-semibold text-slate-900 block">2. Vector Search</span>
-          <span>FastMCP Playbook rule matching</span>
-        </div>
-        <div>
-          <span className="font-semibold text-slate-900 block">3. OOXML Redline</span>
-          <span>Native Word tracked changes</span>
+        {/* Helper Footer Notes */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full text-center text-xs text-slate-500 pt-6 border-t border-slate-200">
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+            <span className="font-bold text-slate-900 block text-sm">1. Structure Parsing</span>
+            <span className="text-slate-500 text-[11px]">Automatic clause tree segmentation</span>
+          </div>
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+            <span className="font-bold text-slate-900 block text-sm">2. Vector Search</span>
+            <span className="text-slate-500 text-[11px]">FastMCP Playbook rule matching</span>
+          </div>
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+            <span className="font-bold text-slate-900 block text-sm">3. OOXML Redline</span>
+            <span className="text-slate-500 text-[11px]">Native Word tracked changes</span>
+          </div>
         </div>
       </div>
     </div>
