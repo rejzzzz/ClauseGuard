@@ -1,4 +1,5 @@
-# API routes handling review session initialization and tracking.
+import re
+import uuid
 from pathlib import Path
 from typing import List, Optional
 from fastapi import APIRouter, File, UploadFile, Form, HTTPException, status
@@ -34,14 +35,19 @@ async def upload_contract(
             detail="Uploaded file is empty."
         )
 
-    # Temporary session initialization to get session storage directory
-    temp_id = f"session_{Path(filename).stem}"
-    saved_path = session_manager.save_uploaded_file(temp_id, filename, content)
+    # Sanitize stem for safe cross-platform folder naming & limit to 32 chars to enforce DB String(64) primary key limit
+    raw_stem = Path(filename).stem.strip()
+    safe_stem = re.sub(r'[^a-zA-Z0-9_\-]', '_', raw_stem).strip('_')[:32].rstrip('_')
+    if not safe_stem:
+        safe_stem = "contract"
+    
+    temp_id = f"session_{safe_stem}_{uuid.uuid4().hex[:8]}"
+    saved_path = session_manager.save_uploaded_file(temp_id, filename.strip(), content)
 
     # Create official session
     context = session_manager.create_session(
         contract_path=str(saved_path),
-        contract_name=Path(filename).stem,
+        contract_name=raw_stem,
         playbook_name=playbook_name,
         session_id=temp_id
     )

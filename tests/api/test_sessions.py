@@ -22,6 +22,21 @@ def test_upload_contract_success(tmp_path):
     assert "session_test_contract" in res_data["session_id"]
 
 
+def test_upload_contract_with_trailing_spaces(tmp_path):
+    # Tests uploading a file with trailing spaces in filename (e.g. "OFFER AGREEMENT .pdf")
+    filename = "Intern - Rejwanul Hoque 2 - INTERNSHIP OFFER AGREEMENT .pdf"
+    files = {"file": (filename, b"%PDF-1.4 Dummy PDF Content", "application/pdf")}
+    data = {"playbook_name": "sample_vendor_msa"}
+    
+    response = client.post("/api/sessions/upload", files=files, data=data)
+    assert response.status_code == 201
+    res_data = response.json()
+    assert res_data["contract_name"] == "Intern - Rejwanul Hoque 2 - INTERNSHIP OFFER AGREEMENT"
+    assert res_data["playbook_name"] == "sample_vendor_msa"
+    assert res_data["session_id"].startswith("session_Intern_")
+    assert len(res_data["session_id"]) <= 64
+
+
 def test_upload_contract_invalid_extension():
     files = {"file": ("test.txt", b"Dummy text", "text/plain")}
     response = client.post("/api/sessions/upload", files=files)

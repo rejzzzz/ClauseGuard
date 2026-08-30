@@ -78,27 +78,36 @@ export default function UploadCard({ onUploadSuccess }: UploadCardProps) {
   };
 
   return (
-    <div className="w-full max-w-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-        Upload Contract for Multi-Agent Audit
-      </h2>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-        Upload your contract document (.docx or .pdf) to initiate automated risk auditing, playbook citation grounding, and tracked-changes redlining.
-      </p>
+    <div className="w-full bg-white border border-slate-200/90 rounded-2xl p-8 sm:p-10 shadow-2xs glass-card">
+      <div className="flex items-center space-x-4 mb-4 border-b border-slate-100 pb-6">
+        <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+        </div>
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900 tracking-tight">
+            Document Audit Vault
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 font-sans mt-0.5">
+            Supports Microsoft Word (.docx) and PDF (.pdf) files up to 25MB
+          </p>
+        </div>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-6 mt-6">
         {/* Drag & Drop File Zone */}
         <div
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+          className={`border-2 border-dashed rounded-2xl p-10 sm:p-12 text-center cursor-pointer transition-all duration-200 hover-lift ${
             dragActive
-              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30'
+              ? 'border-slate-900 bg-slate-100 shadow-md scale-[1.01]'
               : file
-              ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/20'
-              : 'border-gray-300 dark:border-zinc-700 hover:border-gray-400 dark:hover:border-zinc-600'
+              ? 'border-emerald-600 bg-emerald-50/60 shadow-xs'
+              : 'border-slate-300 hover:border-slate-400 bg-slate-50/70'
           }`}
         >
           <input
@@ -108,26 +117,26 @@ export default function UploadCard({ onUploadSuccess }: UploadCardProps) {
             onChange={handleFileChange}
             className="hidden"
           />
-          <label htmlFor="file-upload" className="cursor-pointer block">
-            <div className="mx-auto w-12 h-12 text-gray-400 mb-3 flex items-center justify-center rounded-full bg-gray-100 dark:bg-zinc-800">
-              📄
+          <label htmlFor="file-upload" className="cursor-pointer block space-y-4">
+            <div className="mx-auto w-14 h-14 rounded-2xl bg-white border border-slate-200 text-slate-700 flex items-center justify-center text-2xl shadow-xs">
+              📜
             </div>
             {file ? (
-              <div>
-                <span className="font-semibold text-emerald-700 dark:text-emerald-400 text-sm block">
+              <div className="space-y-1">
+                <span className="font-serif font-bold text-emerald-900 text-base block">
                   {file.name}
                 </span>
-                <span className="text-xs text-gray-500 mt-1 block">
+                <span className="text-xs text-slate-600 block font-mono">
                   {(file.size / 1024).toFixed(1)} KB — Click or drag to replace
                 </span>
               </div>
             ) : (
-              <div>
-                <span className="font-semibold text-blue-600 dark:text-blue-400 text-sm block">
-                  Click to choose a file
+              <div className="space-y-1">
+                <span className="font-bold text-slate-900 text-sm sm:text-base block">
+                  Click to select contract file or drag & drop here
                 </span>
-                <span className="text-xs text-gray-500 mt-1 block">
-                  or drag & drop .docx / .pdf file here
+                <span className="text-xs text-slate-500 block max-w-md mx-auto leading-relaxed">
+                  Supports Master Services Agreements, NDAs, SaaS licenses, and Vendor contracts
                 </span>
               </div>
             )}
@@ -135,22 +144,22 @@ export default function UploadCard({ onUploadSuccess }: UploadCardProps) {
         </div>
 
         {/* Playbook Selection */}
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400 mb-2">
+        <div className="space-y-2.5">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 font-mono">
             Target Playbook Ruleset
           </label>
           <select
             value={playbookName}
             onChange={(e) => setPlaybookName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3.5 border border-slate-300 rounded-xl bg-white text-slate-900 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
           >
-            <option value="sample_vendor_msa">Standard Vendor MSA Playbook (Default)</option>
+            <option value="sample_vendor_msa">Standard Vendor MSA Playbook v2.1 (Default)</option>
           </select>
         </div>
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-600 dark:text-red-400">
+          <div className="p-4 bg-red-50/90 border border-red-200 rounded-xl text-xs text-red-800 font-bold shadow-2xs">
             {errorMessage}
           </div>
         )}
@@ -159,15 +168,18 @@ export default function UploadCard({ onUploadSuccess }: UploadCardProps) {
         <button
           type="submit"
           disabled={!file || isUploading}
-          className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg transition shadow-sm flex items-center justify-center gap-2"
+          className="w-full py-4 px-6 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-sm rounded-xl shadow-md transition-all hover-lift btn-tactile flex items-center justify-center gap-2.5"
         >
           {isUploading ? (
             <>
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              Uploading Contract...
+              <span>Initializing Multi-Agent Audit Session...</span>
             </>
           ) : (
-            'Upload & Create Review Session'
+            <>
+              <span>Start Automated Legal Audit</span>
+              <span className="text-emerald-400">→</span>
+            </>
           )}
         </button>
       </form>

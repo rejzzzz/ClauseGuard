@@ -30,30 +30,30 @@ export default function ClauseCard({
   const getVerdictBadgeClass = (v: string) => {
     switch (v) {
       case 'COMPLIANT':
-        return 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-300';
+        return 'bg-emerald-50 text-emerald-800 border-emerald-200 shadow-2xs';
       case 'DEVIATION':
-        return 'bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-300 border-red-300';
+        return 'bg-red-50 text-red-800 border-red-200 shadow-2xs';
       case 'MISSING_CLAUSE':
-        return 'bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 border-orange-300';
+        return 'bg-amber-50 text-amber-800 border-amber-200 shadow-2xs';
       case 'AMBIGUOUS':
-        return 'bg-yellow-100 dark:bg-yellow-950/60 text-yellow-800 dark:text-yellow-300 border-yellow-300';
+        return 'bg-yellow-50 text-yellow-800 border-yellow-200 shadow-2xs';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300';
+        return 'bg-slate-100 text-slate-700 border-slate-200 shadow-2xs';
     }
   };
 
   const getSeverityBadgeClass = (s: string) => {
     switch (s) {
       case 'CRITICAL':
-        return 'bg-red-600 text-white';
+        return 'bg-red-800 text-white shadow-2xs';
       case 'HIGH':
-        return 'bg-amber-600 text-white';
+        return 'bg-amber-800 text-white shadow-2xs';
       case 'MEDIUM':
-        return 'bg-blue-600 text-white';
+        return 'bg-slate-800 text-white shadow-2xs';
       case 'LOW':
-        return 'bg-gray-500 text-white';
+        return 'bg-slate-200 text-slate-700 shadow-2xs';
       default:
-        return 'bg-gray-400 text-white';
+        return 'bg-slate-200 text-slate-700 shadow-2xs';
     }
   };
 
@@ -74,29 +74,29 @@ export default function ClauseCard({
   };
 
   return (
-    <div className="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
+    <div className="w-full bg-white border border-slate-200/90 rounded-2xl p-7 sm:p-9 shadow-sm hover:shadow-md transition-all duration-200 space-y-6">
       {/* Header Info */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1">
-            {verdict.heading_path || 'Section'}
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-slate-100 pb-5">
+        <div className="space-y-1">
+          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 block">
+            {verdict.heading_path || 'Contract Section'}
           </span>
-          <h3 className="text-base font-bold text-gray-900 dark:text-white">
+          <h3 className="text-xl font-serif font-bold text-slate-900 leading-snug">
             {verdict.heading_title || `Clause ${verdict.clause_id}`}
           </h3>
         </div>
 
         {/* Verdict & Severity Badges */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span
-            className={`px-2.5 py-1 rounded-full border text-xs font-bold ${getVerdictBadgeClass(
+            className={`px-3.5 py-1.5 rounded-full border text-xs font-extrabold tracking-wide ${getVerdictBadgeClass(
               verdict.verdict
             )}`}
           >
             {verdict.verdict}
           </span>
           <span
-            className={`px-2 py-0.5 rounded text-[10px] font-bold ${getSeverityBadgeClass(
+            className={`px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-wide ${getSeverityBadgeClass(
               verdict.severity
             )}`}
           >
@@ -106,36 +106,42 @@ export default function ClauseCard({
       </div>
 
       {/* Rationale & Citation Toggle */}
-      <div className="text-xs text-gray-700 dark:text-gray-300">
-        <p className="line-clamp-2">{verdict.rationale}</p>
+      <div className="text-xs text-slate-700 space-y-3">
+        <p className="leading-relaxed font-sans text-sm text-slate-700">{verdict.rationale}</p>
         <button
           type="button"
           onClick={() => setShowRationale(!showRationale)}
-          className="text-blue-600 dark:text-blue-400 font-semibold mt-1 hover:underline"
+          className="text-slate-900 font-bold hover:text-slate-700 transition-all inline-flex items-center space-x-1.5 text-xs py-1"
         >
-          {showRationale ? 'Hide Evidence Trace' : 'View Reasoning & Citations'}
+          <span>{showRationale ? 'Hide Agent Reasoning & Citations' : 'View Agent Reasoning & Citations →'}</span>
         </button>
 
         {showRationale && (
-          <div className="mt-3 p-3 bg-gray-50 dark:bg-zinc-950 rounded-lg space-y-2 text-xs border border-gray-100 dark:border-zinc-800">
+          <div className="mt-3 p-5 bg-slate-50/90 rounded-xl space-y-3.5 text-xs border border-slate-200/90">
             <div>
-              <span className="font-bold text-gray-900 dark:text-white">Full Rationale:</span>
-              <p className="mt-1 text-gray-600 dark:text-gray-400">{verdict.rationale}</p>
+              <span className="font-bold text-slate-900 block mb-1 uppercase tracking-wider text-[10px] font-mono">
+                Paralegal Reasoning Trace:
+              </span>
+              <p className="text-slate-700 leading-relaxed text-sm">{verdict.rationale}</p>
             </div>
             {verdict.suggested_action && (
-              <div>
-                <span className="font-bold text-gray-900 dark:text-white">Suggested Guidance:</span>
-                <p className="mt-1 text-gray-600 dark:text-gray-400">{verdict.suggested_action}</p>
+              <div className="border-t border-slate-200/80 pt-3">
+                <span className="font-bold text-slate-900 block mb-1 uppercase tracking-wider text-[10px] font-mono">
+                  Drafter Guidance:
+                </span>
+                <p className="text-slate-700 leading-relaxed text-sm">{verdict.suggested_action}</p>
               </div>
             )}
             {verdict.playbook_citation_ids.length > 0 && (
-              <div>
-                <span className="font-bold text-gray-900 dark:text-white">Playbook Citations:</span>
-                <div className="flex flex-wrap gap-1 mt-1">
+              <div className="border-t border-slate-200/80 pt-3">
+                <span className="font-bold text-slate-900 block mb-1.5 uppercase tracking-wider text-[10px] font-mono">
+                  Playbook Citations:
+                </span>
+                <div className="flex flex-wrap gap-2">
                   {verdict.playbook_citation_ids.map((id) => (
                     <span
                       key={id}
-                      className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-mono text-[10px]"
+                      className="px-2.5 py-1 rounded-lg bg-white border border-slate-300/80 text-slate-800 font-mono text-xs shadow-2xs font-semibold"
                     >
                       {id}
                     </span>
@@ -158,34 +164,34 @@ export default function ClauseCard({
 
       {/* Custom Text Edit Area */}
       {isEditingCustom && (
-        <div className="space-y-2">
-          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
-            Custom Human Redline Language:
+        <div className="space-y-2.5 pt-2">
+          <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider font-mono">
+            Custom Legal Language Redline:
           </label>
           <textarea
             value={customText}
             onChange={handleCustomTextChange}
-            rows={3}
-            className="w-full p-2.5 border border-blue-300 dark:border-blue-700 rounded-lg bg-white dark:bg-zinc-800 text-xs font-mono text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Type your custom replacement legal language..."
+            rows={4}
+            className="w-full p-4 border border-slate-300 rounded-xl bg-white text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed shadow-xs"
+            placeholder="Input custom clause text for OOXML redlining..."
           />
         </div>
       )}
 
       {/* HITL Action Toolbar Buttons */}
-      <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-zinc-800">
-        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-          Human Review Action
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
+        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">
+          Human Approval Decision Gate
         </span>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5 flex-wrap">
           <button
             type="button"
             onClick={() => handleActionClick('APPROVE')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-tactile ${
               activeAction === 'APPROVE' && !isEditingCustom
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700'
+                ? 'bg-emerald-700 text-white shadow-md'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
             }`}
           >
             ✓ Approve Edit
@@ -194,22 +200,22 @@ export default function ClauseCard({
           <button
             type="button"
             onClick={() => handleActionClick('EDIT')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-tactile ${
               isEditingCustom
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700'
+                ? 'bg-slate-900 text-white shadow-md'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
             }`}
           >
-            ✏️ Custom Edit
+            ✏️ Custom Redline
           </button>
 
           <button
             type="button"
             onClick={() => handleActionClick('REJECT')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-tactile ${
               activeAction === 'REJECT'
-                ? 'bg-red-600 text-white shadow-sm'
-                : 'bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700'
+                ? 'bg-red-700 text-white shadow-md'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
             }`}
           >
             ✕ Reject Edit

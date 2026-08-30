@@ -9,7 +9,8 @@
 - `REPO_MAP.md`: This file; a directory of codebase files and their purpose.
 - `requirements.txt`: Python package dependencies.
 - `info.md`: Virtual environment activation quickstart.
-- `.env`: Environment variables configuration template.
+- `.env`: Active environment variables configuration.
+- `.env.example`: Environment variables template for Bedrock, Supabase, CORS, models, and file paths.
 - `.gitignore`: Files and folders ignored by git version control.
 
 ## Backend Service (`backend/`)
@@ -53,13 +54,42 @@
 - `backend/mcp_servers/playbook_server/server.py`: Playbook MCP server exposing search and document retrieval tools.
 - `backend/mcp_servers/playbook_server/schemas.py`: Playbook document and query response schemas.
 - `backend/mcp_servers/playbook_server/playbook_ingest.py`: CLI command script for parsing and versioning playbook text files.
+- `backend/db/__init__.py`: Database package initializer.
+- `backend/db/base.py`: SQLAlchemy engine, session maker, and database metadata initializer.
+- `backend/db/models.py`: Declarative ORM models for cases, case documents, chunks, threads, messages, timeline events, sessions, decisions, and chat logs.
+- `backend/db/repository.py`: Database access layer managing CRUD persistence for cases, documents, chunks, chat threads, timeline events, review sessions, and chat transcripts.
+- `backend/cases/__init__.py`: Case domain package initializer.
+- `backend/cases/models.py`: Module re-exporting SQLAlchemy ORM models for case entities.
+- `backend/cases/schemas.py`: Pydantic request, response, and domain schemas for cases, documents, chunks, chat threads, messages, and timeline events.
+- `backend/cases/service.py`: Orchestration service handling case document ingestion, chunking, and metadata lifecycle.
+- `backend/cases/chat_handler.py`: AI response generator for case chat threads featuring semantic context retrieval and citation assembly.
+- `backend/timeline/__init__.py`: Timeline package initializer.
+- `backend/timeline/extractor.py`: Extraction utility synthesizing chronological timeline events from document text chunks.
+- `backend/retrieval/__init__.py`: Retrieval package mapping.
+- `backend/retrieval/vector_store.py`: Local FAISS database abstraction handling indexing and query matching.
+- `backend/retrieval/case_search.py`: Case-scoped semantic similarity search over document chunks.
+- `backend/retrieval/reranker.py`: Reranker selecting top-k rules from search results using cross-encoder/LLM signals.
+- `backend/mcp_servers/__init__.py`: Package mapping for external MCP servers.
+- `backend/mcp_servers/playbook_server/__init__.py`: Playbook server package mapping.
+- `backend/mcp_servers/playbook_server/server.py`: Playbook MCP server exposing search and document retrieval tools.
+- `backend/mcp_servers/playbook_server/schemas.py`: Playbook document and query response schemas.
+- `backend/mcp_servers/playbook_server/playbook_ingest.py`: CLI command script for parsing and versioning playbook text files.
+- `backend/db/__init__.py`: Database package initializer.
+- `backend/db/base.py`: SQLAlchemy engine, session maker, and database metadata initializer.
+- `backend/db/models.py`: Declarative ORM models for cases, case documents, chunks, threads, messages, timeline events, sessions, decisions, and chat logs.
+- `backend/db/repository.py`: Database access layer managing CRUD persistence for cases, documents, chunks, chat threads, timeline events, review sessions, and chat transcripts.
 - `backend/api/__init__.py`: Backend API routing package mapping.
-- `backend/api/main.py`: FastAPI app entrypoint defining middleware, logging, and routers.
-- `backend/api/session_manager.py`: Thread-safe session store managing review session contexts and uploaded/generated file paths.
+- `backend/api/main.py`: FastAPI app entrypoint defining middleware, logging, DB initialization, and routers.
+- `backend/api/session_manager.py`: Thread-safe session store managing review session contexts and syncing with database repository.
 - `backend/api/routes/__init__.py`: Routing packages mapping.
 - `backend/api/routes/sessions.py`: API routes handling review session initialization and tracking.
 - `backend/api/routes/review.py`: API routes managing human-in-the-loop audit actions (approve, edit, reject).
 - `backend/api/routes/reports.py`: API routes managing exportable audit reports.
+- `backend/api/routes/chats.py`: API routes handling multi-agent reasoning chat logs and interactive user messaging.
+- `backend/api/routes/cases.py`: API routes managing Case CRUD operations.
+- `backend/api/routes/case_documents.py`: API routes handling document uploads, listing, and deletion within cases.
+- `backend/api/routes/case_threads.py`: API routes handling multi-thread case discussions and AI-assisted responses.
+- `backend/api/routes/case_timeline.py`: API routes handling incident timeline event queries and updates.
 - `backend/api/models.py`: Pydantic models defining REST API request and response schemas.
 - `backend/config/__init__.py`: Config modules package mapping.
 - `backend/config/settings.py`: Global project configuration loading settings from environment variables.
@@ -74,7 +104,12 @@
 - `tests/api/test_sessions.py`: Integration tests for session upload, status tracking, and audit execution routes.
 - `tests/api/test_review.py`: Integration tests for verdict inspection, HITL decision recording, and redline document download.
 - `tests/api/test_reports.py`: Integration tests for audit report export endpoints.
+- `tests/api/test_chats.py`: Unit tests for chat log API endpoints and database persistence.
 - `tests/api/test_api_e2e.py`: End-to-end integration tests verifying full REST API lifecycle with real multi-agent pipeline.
+- `tests/api/test_cases.py`: Integration tests for Case CRUD API endpoints.
+- `tests/api/test_case_documents.py`: Integration tests for case document upload and management endpoints.
+- `tests/api/test_case_threads.py`: Integration tests for case chat threads and message posting endpoints.
+- `tests/api/test_case_timeline.py`: Integration tests for case timeline retrieval and update endpoints.
 - `tests/agents/__init__.py`: Unit tests package mapping for agent implementations.
 - `tests/agents/test_orchestrator.py`: Unit tests for Orchestrator Agent state machine and delegation.
 - `tests/agents/test_auditor.py`: Unit tests for Auditor Agent verdict classification.
@@ -96,8 +131,17 @@
 - `tests/redlining/test_redlining_edge_cases.py`: Unit tests for edge cases in redline mutation, diff HTML, and missing clause actions.
 - `tests/retrieval/__init__.py`: Unit tests package mapping for vector store search.
 - `tests/retrieval/test_vector_store.py`: Unit tests for FAISS indexing and retrieval.
+- `tests/retrieval/test_case_search.py`: Unit tests for case-scoped semantic similarity search.
 - `tests/mcp_servers/__init__.py`: Unit tests package mapping for MCP servers.
 - `tests/mcp_servers/test_playbook_server.py`: Unit tests for FastMCP playbook server tools.
+- `tests/cases/__init__.py`: Test package root for case domain features.
+- `tests/cases/test_models.py`: Unit tests for case-based SQLAlchemy ORM models and relationships.
+- `tests/cases/test_schemas.py`: Unit tests for case-based Pydantic schemas and serialization.
+- `tests/cases/test_repository.py`: Integration tests for database repository CRUD operations for case entities.
+- `tests/cases/test_service.py`: Unit tests for case document ingestion service.
+- `tests/cases/test_chat_handler.py`: Unit tests for case chat AI handler and citation generation.
+- `tests/timeline/__init__.py`: Test package root for timeline features.
+- `tests/timeline/test_extractor.py`: Unit tests for timeline event extraction and classification.
 
 ## Frontend Next.js Application (`frontend/`)
 - `frontend/package.json`: Frontend dependency and script configuration.
@@ -105,14 +149,41 @@
 - `frontend/tailwind.config.ts`: Tailwind CSS design configuration.
 - `frontend/postcss.config.mjs`: PostCSS configuration for styling.
 - `frontend/next.config.ts`: Next.js system configuration.
-- `frontend/src/lib/types.ts`: TypeScript type definitions matching backend REST API models.
+- `frontend/src/lib/types.ts`: TypeScript type definitions matching backend REST API models and frontend metrics.
 - `frontend/src/lib/api.ts`: API client functions connecting to the FastAPI backend service.
+- `frontend/src/lib/mockData.ts`: Pre-populated past contract sessions, audit metrics, and multi-agent chat logs.
+- `frontend/src/lib/FontContext.tsx`: React context managing dynamic typography preset switching, font variables, and localStorage persistence.
 - `frontend/src/components/Navbar.tsx`: Header navigation bar with backend API health status indicator.
+- `frontend/src/components/AppShell.tsx`: Application shell component managing conditional layouts between public landing page and workspace.
+- `frontend/src/components/LandingNavbar.tsx`: Full-width h-20 header navigation bar for public landing page.
+- `frontend/src/components/LandingFooter.tsx`: Multi-column footer component for public landing page.
+- `frontend/src/components/SidebarNav.tsx`: Fixed-position navigation sidebar for workspace application pages.
+- `frontend/src/components/TopHeader.tsx`: Workspace top header displaying backend API status and quick actions.
+- `frontend/src/components/Logo.tsx`: Reusable brand logo component serving as single source of truth for ClauseGuard branding across headers and sidebars.
+- `frontend/src/components/ApiStatusBadge.tsx`: Reusable backend API health status indicator component displaying live FastAPI connection state.
+- `frontend/src/components/HeroSection.tsx`: Landing page hero component featuring an interactive tracked-changes live preview.
+- `frontend/src/components/AgentPipelineVisualizer.tsx`: Interactive multi-agent architecture breakdown component.
+- `frontend/src/components/AgentChatLog.tsx`: Multi-agent step-by-step reasoning transcript viewer component.
 - `frontend/src/components/UploadCard.tsx`: Contract document upload drag-and-drop component with playbook selection.
 - `frontend/src/components/DiffView.tsx`: Text diff comparison displaying original contract text and proposed redline language.
 - `frontend/src/components/ClauseCard.tsx`: Per-clause verdict card with risk indicators and human review action buttons.
 - `frontend/src/components/ReportViewer.tsx`: Structured summary card displaying document risk metrics, Critic grounding score, and session history log.
-- `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping.
-- `frontend/src/app/page.tsx`: Landing page and visual UI component interface.
+- `frontend/src/components/CaseDocumentUploader.tsx`: Drag-and-drop file uploader and ingestion status manager component for case matters.
+- `frontend/src/components/CaseThreadChat.tsx`: Multi-thread AI research chat component with thread switching and interactive document citation inspector.
+- `frontend/src/components/CaseTimelineView.tsx`: Incident timeline feed and interactive chronological graph component with disputed fact markers.
+- `frontend/src/app/layout.tsx`: Root layout structure defining page container, global HTML/CSS wrapping, and app shell.
+- `frontend/src/app/page.tsx`: Clean general marketing landing page showcasing product capabilities and agent architecture.
+- `frontend/src/app/cases/page.tsx`: Case Matters Dashboard page displaying case cards, metrics summary, and search filtering.
+- `frontend/src/app/active-cases/page.tsx`: Dedicated Active Case Matters workspace page listing active legal investigations, doc counts, and workbench launchers.
+- `frontend/src/app/cases/new/page.tsx`: Case Matter creation workspace page.
+- `frontend/src/app/cases/[caseId]/page.tsx`: Flagship 3-panel Case Workbench workspace integrating documents, multi-thread chat, and incident timeline.
+- `frontend/src/app/upload/page.tsx`: Dedicated contract document upload and audit session creation workspace page.
+- `frontend/src/app/dashboard/page.tsx`: Executive legal intelligence and contract audit dashboard.
+- `frontend/src/app/documents/page.tsx`: Past contract audit documents repository and inspection view.
+- `frontend/src/app/chats/page.tsx`: Multi-agent reasoning chat log and custom guidance interface.
+- `frontend/src/app/settings/page.tsx`: Interactive Typography Settings and live font playground workspace page.
 - `frontend/src/app/review/[sessionId]/page.tsx`: Interactive review workspace for clause auditing, HITL actions, and redline document finalization.
 - `frontend/src/app/reports/[sessionId]/page.tsx`: Audit summary report page visualizing document risk metrics and Critic grounding traces.
+
+
+

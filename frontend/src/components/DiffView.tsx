@@ -10,31 +10,31 @@ interface DiffViewProps {
 
 export default function DiffView({ originalText, proposedText, action = 'REPLACE' }: DiffViewProps) {
   return (
-    <div className="rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 p-4 font-mono text-xs space-y-2">
-      <div className="flex items-center justify-between text-gray-500 text-[10px] font-sans font-semibold uppercase tracking-wider mb-1">
-        <span>Edit Comparison</span>
-        <span className="px-2 py-0.5 rounded bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300">
+    <div className="rounded-xl border border-slate-200/90 bg-slate-50/90 p-5 sm:p-6 font-mono text-xs space-y-4 shadow-2xs">
+      <div className="flex items-center justify-between text-slate-500 text-[11px] font-sans font-bold uppercase tracking-wider">
+        <span>OOXML Redline Comparison</span>
+        <span className="px-3 py-1 rounded-full bg-white text-slate-800 border border-slate-200 text-xs font-mono font-bold shadow-2xs">
           Action: {action}
         </span>
       </div>
 
       {/* Original Language (Deletion / Redline Strike) */}
       {originalText && (
-        <div className="p-2.5 rounded bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500 text-red-800 dark:text-red-300">
-          <div className="text-[10px] font-sans font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-1">
-            - Original Text (Target Removal)
+        <div className="p-4 rounded-xl bg-red-50/90 border-l-4 border-red-500 text-red-950 space-y-1 shadow-2xs">
+          <div className="text-[11px] font-mono font-bold text-red-800 uppercase tracking-wider mb-1">
+            - Original Contract Language (Target Deletion)
           </div>
-          <p className="line-through leading-relaxed whitespace-pre-wrap">{originalText}</p>
+          <p className="line-through leading-relaxed whitespace-pre-wrap font-sans text-sm">{originalText}</p>
         </div>
       )}
 
       {/* Proposed Language (Insertion / Green) */}
       {proposedText && (
-        <div className="p-2.5 rounded bg-emerald-50 dark:bg-emerald-950/30 border-l-4 border-emerald-500 text-emerald-800 dark:text-emerald-300">
-          <div className="text-[10px] font-sans font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">
-            + Proposed Language (Redline Insert)
+        <div className="p-4 rounded-xl bg-emerald-50/90 border-l-4 border-emerald-600 text-emerald-950 space-y-1 shadow-2xs">
+          <div className="text-[11px] font-mono font-bold text-emerald-800 uppercase tracking-wider mb-1">
+            + Proposed Playbook Language (Tracked Insert)
           </div>
-          <p className="font-semibold leading-relaxed whitespace-pre-wrap">{proposedText}</p>
+          <p className="font-semibold leading-relaxed whitespace-pre-wrap font-sans text-sm text-emerald-950">{proposedText}</p>
         </div>
       )}
     </div>

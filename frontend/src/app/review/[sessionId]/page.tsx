@@ -147,9 +147,9 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center p-12">
-        <div className="flex items-center gap-3 text-gray-500 font-medium">
-          <span className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></span>
+      <div className="flex-1 flex items-center justify-center p-12 bg-slate-50">
+        <div className="flex items-center gap-3 text-slate-600 font-medium">
+          <span className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></span>
           Loading review session context...
         </div>
       </div>
@@ -158,12 +158,12 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
   if (!session) {
     return (
-      <div className="flex-1 flex items-center justify-center p-12">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
-          <h3 className="font-bold text-red-800 text-lg mb-2">Session Not Found</h3>
-          <p className="text-sm text-red-600 mb-4">{errorMessage || 'Requested review session does not exist.'}</p>
-          <Link href="/" className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">
-            Return to Upload
+      <div className="flex-1 flex items-center justify-center p-12 bg-slate-50">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-8 max-w-md text-center space-y-4 shadow-sm">
+          <h3 className="font-serif font-bold text-red-800 text-xl">Session Not Found</h3>
+          <p className="text-sm text-red-600">{errorMessage || 'Requested review session does not exist.'}</p>
+          <Link href="/upload" className="px-5 py-2.5 bg-slate-900 text-white rounded-lg text-xs font-bold inline-block shadow-sm">
+            Return to Upload Vault
           </Link>
         </div>
       </div>
@@ -171,30 +171,30 @@ export default function ReviewPage({ params }: ReviewPageProps) {
   }
 
   return (
-    <div className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8 space-y-6">
+    <div className="flex-1 w-full space-y-8 bg-slate-50 text-slate-900 pb-12">
       {/* Session Metadata Header */}
-      <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
-        <div>
-          <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-7 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-2xs">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900">
               {session.contract_name}
             </h1>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
               State: {session.current_state}
             </span>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Session ID: <span className="font-mono">{session.session_id}</span> | Playbook: <span className="font-semibold">{session.playbook_name}</span>
+          <p className="text-xs text-slate-500 font-sans">
+            Session ID: <span className="font-mono">{session.session_id}</span> | Playbook: <span className="font-semibold text-slate-800">{session.playbook_name}</span>
           </p>
         </div>
 
-        {/* Global Action Controls */}
+        {/* Global Action Controls with Generous Button Spacing */}
         <div className="flex items-center flex-wrap gap-3">
           {(session.current_state === 'UNINITIALIZED' || session.current_state === 'INGESTED') && (
             <button
               onClick={handleRunAudit}
               disabled={auditRunning}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold text-sm rounded-lg transition shadow-sm flex items-center gap-2"
+              className="px-6 py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-sm hover-lift btn-tactile flex items-center gap-2"
             >
               {auditRunning ? (
                 <>
@@ -212,7 +212,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
               <button
                 onClick={handleSubmitHitl}
                 disabled={submittingHitl}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm rounded-lg transition shadow-sm"
+                className="px-5 py-3 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-2xs hover-lift btn-tactile"
               >
                 {submittingHitl ? 'Submitting...' : '✓ Submit Review Decisions'}
               </button>
@@ -220,7 +220,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
               <button
                 onClick={handleFinalizeRedline}
                 disabled={finalizing}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold text-sm rounded-lg transition shadow-sm"
+                className="px-5 py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-2xs hover-lift btn-tactile"
               >
                 {finalizing ? 'Generating .docx...' : '📝 Generate Redlined Document'}
               </button>
@@ -231,7 +231,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
             <a
               href={getDownloadUrl(sessionId)}
               download
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm rounded-lg transition shadow-sm flex items-center gap-1.5"
+              className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-2 hover-lift btn-tactile"
             >
               ⬇️ Download Redlined .docx
             </a>
@@ -239,7 +239,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
           <Link
             href={`/reports/${sessionId}`}
-            className="px-4 py-2 border border-gray-300 dark:border-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-300 font-semibold text-sm rounded-lg transition"
+            className="px-5 py-3 border border-slate-300 hover:bg-slate-100 text-slate-800 font-bold text-xs rounded-xl transition-all shadow-2xs"
           >
             📊 View Audit Report
           </Link>
@@ -248,24 +248,24 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
       {/* Alert Messages */}
       {errorMessage && (
-        <div className="p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-600 dark:text-red-400">
+        <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-medium">
           {errorMessage}
         </div>
       )}
       {statusMessage && (
-        <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-sm text-emerald-700 dark:text-emerald-300">
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 font-medium">
           {statusMessage}
         </div>
       )}
 
       {/* Pre-Audit Callout */}
       {(session.current_state === 'UNINITIALIZED' || session.current_state === 'INGESTED') && !auditRunning && (
-        <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-8 text-center max-w-xl mx-auto space-y-4">
-          <div className="text-4xl">🤖</div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-white border border-slate-200 rounded-xl p-10 text-center max-w-xl mx-auto space-y-4 shadow-xs">
+          <div className="text-4xl">📜</div>
+          <h3 className="text-2xl font-serif font-bold text-slate-900">
             Ready to Audit Contract
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-xs text-slate-600 leading-relaxed font-sans">
             Click <strong>Run Multi-Agent Audit</strong> above to start document structure parsing, playbook FAISS search, deviation classification, and redline drafting.
           </p>
         </div>
@@ -273,17 +273,17 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
       {/* Clause Cards Workspace */}
       {verdictsData && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+        <div className="space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+            <h2 className="text-xl font-serif font-bold text-slate-900">
               Evaluated Contract Clauses ({verdictsData.verdicts.length})
             </h2>
-            <span className="text-xs font-semibold text-gray-500">
-              Overall Risk: <strong className="text-red-600 dark:text-red-400">{verdictsData.overall_risk_level}</strong>
+            <span className="text-xs font-semibold text-slate-500">
+              Overall Document Risk: <strong className="text-red-700 font-serif text-sm">{verdictsData.overall_risk_level}</strong>
             </span>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {verdictsData.verdicts.map((verdict) => {
               const matchingEdit = verdictsData.edits.find((e) => e.clause_id === verdict.clause_id);
               return (

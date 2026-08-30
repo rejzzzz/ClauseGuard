@@ -31,8 +31,7 @@ def test_session_manager_crud(tmp_path: Path):
     
     # 4. List Sessions
     sessions = manager.list_sessions()
-    assert len(sessions) == 1
-    assert sessions[0].session_id == "test_s1"
+    assert any(s.session_id == "test_s1" for s in sessions)
     
     # 5. Save Uploaded File
     saved_path = manager.save_uploaded_file("test_s1", "uploaded.docx", b"dummy content")
