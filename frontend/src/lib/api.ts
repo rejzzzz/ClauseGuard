@@ -49,8 +49,12 @@ async function handleResponse<T>(response: Response): Promise<T> {
  * Checks backend service health status.
  */
 export async function checkHealth(): Promise<{ status: string; service: string }> {
-  const res = await fetch(`${API_BASE_URL}/health`);
-  return handleResponse(res);
+  try {
+    const res = await fetch(`${API_BASE_URL}/health`);
+    return await handleResponse(res);
+  } catch {
+    return { status: 'offline', service: 'ClauseGuard Standalone' };
+  }
 }
 
 // ─── CASE WORKBENCH API FUNCTIONS ────────────────────────────
@@ -59,12 +63,17 @@ export async function checkHealth(): Promise<{ status: string; service: string }
  * Lists all case matters.
  */
 export async function listCases(statusFilter?: string): Promise<CaseItem[]> {
-  const url = new URL(`${API_BASE_URL}/api/cases`);
-  if (statusFilter) {
-    url.searchParams.append('status', statusFilter);
+  try {
+    const url = new URL(`${API_BASE_URL}/api/cases`);
+    if (statusFilter) {
+      url.searchParams.append('status', statusFilter);
+    }
+    const res = await fetch(url.toString());
+    return await handleResponse<CaseItem[]>(res);
+  } catch {
+    console.log('[ClauseGuard] Backend API is offline');
+    return [];
   }
-  const res = await fetch(url.toString());
-  return handleResponse<CaseItem[]>(res);
 }
 
 /**

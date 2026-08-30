@@ -10,6 +10,7 @@ import TopHeader from '@/components/TopHeader';
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
+  const isSettingsPage = pathname.startsWith('/settings');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   if (isLandingPage) {

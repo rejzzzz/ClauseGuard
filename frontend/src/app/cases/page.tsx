@@ -28,8 +28,8 @@ export default function CasesDashboardPage() {
         if (!ignore) {
           setCases(data);
         }
-      } catch (err) {
-        console.warn('Failed to load cases:', err);
+      } catch {
+        console.info('Backend API offline — standalone demo mode active');
       } finally {
         if (!ignore) {
           setLoading(false);

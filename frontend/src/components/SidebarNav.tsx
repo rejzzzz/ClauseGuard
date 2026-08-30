@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { listCases } from '@/lib/api';
-import { CaseItem } from '@/lib/types';
+import Logo from '@/components/Logo';
 
 interface SidebarNavProps {
   mobileOpen?: boolean;
@@ -13,19 +12,6 @@ interface SidebarNavProps {
 
 export default function SidebarNav({ mobileOpen = false, onCloseMobile }: SidebarNavProps) {
   const pathname = usePathname();
-  const [cases, setCases] = useState<CaseItem[]>([]);
-
-  useEffect(() => {
-    async function loadCases() {
-      try {
-        const data = await listCases('ACTIVE');
-        setCases(data.slice(0, 5));
-      } catch (err) {
-        console.warn('Backend offline or error listing cases:', err);
-      }
-    }
-    loadCases();
-  }, [pathname]);
 
   const navItems = [
     {
@@ -34,6 +20,15 @@ export default function SidebarNav({ mobileOpen = false, onCloseMobile }: Sideba
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+      ),
+    },
+    {
+      label: 'Active Cases',
+      href: '/active-cases',
+      icon: (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V8zm0 0l-2 3v7a2 2 0 002 2h14a2 2 0 002-2v-7l-2-3" />
         </svg>
       ),
     },
@@ -73,26 +68,24 @@ export default function SidebarNav({ mobileOpen = false, onCloseMobile }: Sideba
         </svg>
       ),
     },
+    {
+      label: 'Settings Studio',
+      href: '/settings',
+      icon: (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      ),
+    },
   ];
 
   const sidebarContent = (
     <div className="flex flex-col justify-between h-full">
       <div>
         {/* Brand Header */}
-        <div className="flex items-center justify-between px-6 h-20 border-b border-slate-200/80">
-          <Link href="/" onClick={onCloseMobile} className="flex items-center space-x-3.5 group">
-            <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-base shadow-sm group-hover:bg-slate-800 transition-colors">
-              CG
-            </div>
-            <div>
-              <div className="font-serif font-extrabold text-slate-900 tracking-tight text-base group-hover:text-slate-700">
-                ClauseGuard
-              </div>
-              <div className="text-[10px] uppercase font-mono font-bold text-slate-500 tracking-wider -mt-0.5">
-                Legal Counsel Suite
-              </div>
-            </div>
-          </Link>
+        <div className="flex items-center justify-between px-6 h-16 border-b border-slate-200/80">
+          <Logo onClick={onCloseMobile} />
           {onCloseMobile && (
             <button
               onClick={onCloseMobile}
@@ -114,7 +107,7 @@ export default function SidebarNav({ mobileOpen = false, onCloseMobile }: Sideba
             <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
-            <span>+ Start New Case</span>
+            <span>Start New Case</span>
           </Link>
         </div>
 
@@ -130,69 +123,16 @@ export default function SidebarNav({ mobileOpen = false, onCloseMobile }: Sideba
                 key={item.href}
                 href={item.href}
                 onClick={onCloseMobile}
-                className={`flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-semibold transition-all duration-200 ${
-                  isActive
+                className={`flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-semibold transition-all duration-200 ${isActive
                     ? 'bg-slate-900 text-white shadow-xs font-bold'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
-                }`}
+                  }`}
               >
                 <span className={isActive ? 'text-emerald-400' : 'text-slate-400'}>{item.icon}</span>
                 <span>{item.label}</span>
               </Link>
             );
           })}
-        </div>
-
-        {/* Active Case Matters */}
-        <div className="px-4 py-4 border-t border-slate-100 space-y-2">
-          <div className="px-3 flex items-center justify-between">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
-              Active Case Matters
-            </span>
-            <Link
-              href="/cases"
-              onClick={onCloseMobile}
-              className="text-[10px] font-bold text-slate-500 hover:text-slate-900 transition-colors"
-            >
-              View All
-            </Link>
-          </div>
-
-          <div className="space-y-1">
-            {cases.length > 0 ? (
-              cases.map((c) => {
-                const isCaseActive = pathname?.includes(c.id);
-                return (
-                  <Link
-                    key={c.id}
-                    href={`/cases/${c.id}`}
-                    onClick={onCloseMobile}
-                    className={`block px-3.5 py-2.5 rounded-xl text-xs transition-all ${
-                      isCaseActive
-                        ? 'bg-slate-100 font-bold text-slate-900 border-l-2 border-slate-900'
-                        : 'hover:bg-slate-50/80 text-slate-600'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="truncate font-serif text-xs font-bold text-slate-800 max-w-[130px]">
-                        {c.title}
-                      </span>
-                      <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-200 text-slate-700">
-                        {c.document_count} docs
-                      </span>
-                    </div>
-                    <div className="text-[10px] text-slate-400 font-mono truncate mt-0.5">
-                      {c.case_type} · {c.thread_count} threads
-                    </div>
-                  </Link>
-                );
-              })
-            ) : (
-              <div className="px-3 py-2 text-[11px] text-slate-400 italic">
-                No active cases yet.
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
